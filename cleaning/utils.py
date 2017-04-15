@@ -17,36 +17,52 @@ def unpack_column(df, id_colname, packed_colname, sep=';'):
     to_concat = [relation, pd.DataFrame(relation[packed_colname].tolist())]
     relation = pd.concat(to_concat, axis=1).drop(packed_colname, axis=1)
     relation = pd.melt(relation, var_name=dummy_name, value_name=packed_colname, id_vars=[id_colname])
+    relation[packed_colname] = relation[packed_colname].replace('nan', np.nan)
     relation = relation.dropna(how='any').drop(dummy_name, axis=1).sort_values(by=id_colname)
 
     return relation
 
-def clean_colum(df,col_name):
-    #remove all data in () and in [], removes trailing white space. We also removes
-    #all white space before and after '.' and set empty
-    #cells to np.nan also replace nan string by np.nan
-    df[col_name] = df[col_name].str.replace(r"(\(.*\))|(\[.*\])|\?|\(|\)|\[|\]","")
-    df[col_name] = df[col_name].str.replace(r"\s*\.\s*",".")
-    df[col_name] = df[col_name].str.strip('; ').replace('',np.nan).replace('nan',np.nan)
-    df = df.dropna()
-    return df
+def clean_column(col):
+    """ Clean a given Serie by removing special characters and patterns """
+
+    # Remove string in () or [] or ?...
+    col = col.str.replace(r'(\(.*\))|(\[.*\])|\?|\(|\)|\[|\]', '')
+    
+    # Remove whitespaces before and after '.'
+    col = col.str.replace(r'\s*\.\s*', '.')
+
+    # Strip and replace NaN values
+    col = col.str.strip('; ').replace('', np.nan)#.replace('nan',np.nan)
+
+    return col
 
 
-def extract_table(column,new_col_name):
-    column = column.drop_duplicates(keep='first').reset_index(drop=True)
-    #Shift to start with ID 1
-    column.index = column.index + 1
-    df = column.to_frame()
-    df.columns = [new_col_name]
+def extract_table(col, col_name):
+    """ Extract a table from a column of values by assigning new IDs """
+
+    # Drop duplicates and build a fresh new index
+    col = col.drop_duplicates(keep='first').reset_index(drop=True)
+
+    # Shift to start with ID 1
+    col.index = col.index + 1
+
+    # Build a dataframe out of the column
+    df = col.to_frame()
+
+    # Set to the new column name
+    df.columns = [col_name]
+
+    # Add the new ID column
     df['id'] = df.index
-    return df[['id',new_col_name]]
 
-def map_column(col, table):
+    return df[['id', col_name]]
+
+def map_column(col, table, id_col, value_col):
     """
-	Map the values in col to the IDs in table.
+    Map the values in col to the IDs in table.
 
-	table must have two columns (id, value).
-	col values correspond to table values.
-	"""
-    mapper = pd.Series(table[table.columns[0]].values, index=table[table.columns[1]])
+    table must have two columns (id, value).
+    col values correspond to table values.
+    """
+    mapper = pd.Series(table[id_col].values, index=table[value_col])
     return col.map(mapper)
