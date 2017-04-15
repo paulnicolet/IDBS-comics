@@ -21,17 +21,15 @@ def unpack_column(df, id_colname, packed_colname, sep=';'):
 
     return relation
 
-def clean_colum(column):
-
-    # List of string that we want to remove
-    stringToRemove = ["(\(.*\))" , "(\[.*\])" , "\?" , "\(" , "\)" , "\[" , "\]"]
-
-    #Make regular expression based on the list of strings
-    expression = re.compile('|'.join(stringToRemove))
-
-    #remove all data in () and in [], removes trailing white space and set empty cells to nan
-    column = column.str.replace(expression,"").str.strip('; ').replace('',np.nan)
-    return column.dropna()
+def clean_colum(df,col_name):
+    #remove all data in () and in [], removes trailing white space. We also removes
+    #all white space before and after '.' and set empty
+    #cells to np.nan also replace nan string by np.nan
+    df[col_name] = df[col_name].str.replace(r"(\(.*\))|(\[.*\])|\?|\(|\)|\[|\]","")
+    df[col_name] = df[col_name].str.replace(r"\s*\.\s*",".")
+    df[col_name] = df[col_name].str.strip('; ').replace('',np.nan).replace('nan',np.nan)
+    df = df.dropna()
+    return df
 
 
 def extract_table(column,new_col_name):
