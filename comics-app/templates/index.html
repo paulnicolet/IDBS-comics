@@ -8,12 +8,22 @@
         <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/uikit.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/uikit-icons.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     </head>
 
 
     <body>
 
-    	<h1> Hello World! <span uk-icon="icon: heart"></span></h1>
+    	<div class="uk-container">
+    		<h1> IDBS-comics <span uk-icon="icon: heart"></span></h1>
+
+    		<ul uk-tab>
+    			<li class="uk-active" id="search-tab"><a href="">Search</a></li>
+    			<li id="queries-tab"><a href="">Queries</a></li>
+    			<li id="insert-tab"><a href="">Insert</a></li>
+    			<li id="delete-tab"><a href="">Delete</a></li>
+			</ul>
+    	</div>
 
     </body>
 
