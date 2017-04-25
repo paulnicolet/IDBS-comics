@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask, g, render_template
 from utils import get_db
 import os
 
@@ -15,7 +15,5 @@ app.config.update({'DB_USER': os.environ['IDBS_USER'],
 
 @app.route('/')
 def hello_world():
-    con = get_db(app, g)
-    print(con)
-
-    return 'Hello, World!'
+    #con = get_db(app, g)
+    return render_template('index.html')
