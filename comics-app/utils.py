@@ -1,7 +1,9 @@
 import cx_Oracle
 
-
 def get_db(app, context):
+    """
+    Connect to the database and return connection.
+    """
     if not hasattr(context, 'db'):
         dsn_tns = cx_Oracle.makedsn(app.config['DB_SERVER'],
                                     app.config['DB_PORT'],
