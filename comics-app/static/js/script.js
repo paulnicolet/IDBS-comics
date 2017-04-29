@@ -53,7 +53,7 @@ function displayData(data) {
     });
 
     head.append(firstRow);
-    table.append(head);
+    table.html(head);
 
     // Build actual table
     var body = $("<tbody></tbody>");
