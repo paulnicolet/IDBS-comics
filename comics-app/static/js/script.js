@@ -2,55 +2,91 @@ $(document).ready(function () {
     initTabs();
 });
 
+// Global cache
+var cache = {
+    forms: {},
+    tables: {}
+};
+
+
 function initTabs() {
     // Search is active by default, so load it first
-     buildSearch();
+    buildSearch();
 
     // Init search tab
-    $('#search-tab').on('click', function() {
+    $('#search-tab').on('click', function () {
         buildSearch();
     });
 
-    $('#queries-tab').on('click', function() {
+    $('#queries-tab').on('click', function () {
         buildQueries();
     });
 }
 
 function buildSearch() {
-    // Load the form
-    $('#db-interface').load('/search', function() {
-        // Register the form
-        $('#search-form').ajaxForm(function(data) {
-            displayData(data);
-        });
+    // Restore cached data
+    $('#data-table').html(cache.tables.search || '');
 
-        // Load the tables names and fill the advanced options
-        $.ajax('/get_table_names').done(function(data) {
-            data.forEach(function(name) {
-                name = ' ' + name + ' ';
+    // Restore cached form
+    if (cache.forms.search) {
+        $('#db-interface').html(cache.forms.search);
+    } else {
+        // Not in cache
+        // Load the form
+        $('#db-interface').load('/search', function () {
+            // Register the form
+            $('#search-form').ajaxForm(function (data) {
+                displayData(data);
 
-                // Create checkbox
-                var input = $('<input class="uk-checkbox" type="checkbox" checked>');
-                input.attr('name', name);
+                // Cache table content
+                cache.tables.search = $('#data-table').html();
+            });
 
-                // Add label
-                var label = $('<label></label>');
-                label.append(input);
-                label.append(name);
+            // Load the tables names and fill the advanced options
+            $.ajax('/get_table_names').done(function (data) {
+                data.forEach(function (name) {
+                    name = ' ' + name + ' ';
 
-                $('#tables-checkboxes').append(label);
+                    // Create checkbox
+                    var input = $('<input class="uk-checkbox" type="checkbox" checked>');
+                    input.attr('name', name);
+
+                    // Add label
+                    var label = $('<label></label>');
+                    label.append(input);
+                    label.append(name);
+
+                    $('#tables-checkboxes').append(label);
+
+                    // Cache result
+                    cache.forms.search = $('#db-interface').html();
+                });
             });
         });
-    });
+    }
 }
 
-function buildQueries(){
-    $('#db-interface').load('/queries', function() {
+function buildQueries() {
+    // Restore cached data
+    $('#data-table').html(cache.tables.queries || '');
 
-        $('#queries-form').ajaxForm(function(data) {
-        displayData(data);
+    // Restore cached form
+    if (cache.forms.queries) {
+        $('#db-interface').html(cache.forms.queries);
+    } else {
+        // Not in cache
+        $('#db-interface').load('/queries', function () {
+            $('#queries-form').ajaxForm(function (data) {
+                displayData(data);
+
+                // Cache table content
+                cache.tables.queries = $('#data-table').html();
+            });
+
+            // Cache form
+            cache.forms.queries = $('#db-interface').html();
         });
-    })
+    }
 }
 
 function displayData(data) {
@@ -59,7 +95,7 @@ function displayData(data) {
     // Build header
     var head = $("<thead></thead>");
     var firstRow = $("<tr></tr>");
-    data.shift().forEach(function(name) {
+    data.shift().forEach(function (name) {
         var cell = $('<th></th>');
         cell.append(name);
         firstRow.append(cell);
@@ -70,11 +106,11 @@ function displayData(data) {
 
     // Build actual table
     var body = $("<tbody></tbody>");
-    data.forEach(function(tuple) {
+    data.forEach(function (tuple) {
         // For each tuple, build the row
         var row = $("<tr></tr>");
 
-        tuple.forEach(function(name) {
+        tuple.forEach(function (name) {
             // For each element, build the cell
             var cell = $('<td></td>');
             cell.append(name);
