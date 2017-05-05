@@ -30,6 +30,14 @@ function buildSearch() {
     // Restore cached form
     if (cache.forms.search) {
         $('#db-interface').html(cache.forms.search);
+
+        // Register the form
+        $('#search-form').ajaxForm(function (data) {
+            displayData(data);
+
+            // Cache table content
+            cache.tables.search = $('#data-table').html();
+        });
     } else {
         // Not in cache
         // Load the form
@@ -73,6 +81,12 @@ function buildQueries() {
     // Restore cached form
     if (cache.forms.queries) {
         $('#db-interface').html(cache.forms.queries);
+        $('#queries-form').ajaxForm(function (data) {
+            displayData(data);
+
+            // Cache table content
+            cache.tables.queries = $('#data-table').html();
+        });
     } else {
         // Not in cache
         $('#db-interface').load('/queries', function () {
@@ -97,7 +111,7 @@ function displayData(data) {
     var firstRow = $("<tr></tr>");
     data.shift().forEach(function (name) {
         var cell = $('<th></th>');
-        cell.append(name.replace(/_/g,' '));
+        cell.append(name.replace(/_/g, ' '));
         firstRow.append(cell);
     });
 
