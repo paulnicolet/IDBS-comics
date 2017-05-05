@@ -1,6 +1,7 @@
 import cx_Oracle
 import re
 
+
 def get_db(app, context):
     """
     Connect to the database and return connection.
@@ -16,6 +17,7 @@ def get_db(app, context):
 
     return context.db
 
+
 def get_queries(app, context):
     if not hasattr(context, 'queries'):
         with open(app.config['QUERIES_PATH'], 'r') as fd:
@@ -30,3 +32,8 @@ def get_queries(app, context):
             context.queries[query[0]] = query[1]
 
     return context.queries
+
+
+def shutdown(app, context):
+    with app.app_context():
+        get_db(app, context).close()

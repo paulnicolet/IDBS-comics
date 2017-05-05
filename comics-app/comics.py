@@ -1,8 +1,12 @@
 from flask import Flask, g, render_template, request, jsonify
-from utils import get_db,get_queries
+from utils import get_db, get_queries, shutdown
 import os
+import atexit
 
 app = Flask(__name__)
+
+# Register clean up function
+atexit.register(shutdown, app=app, context=g)
 
 # Set app configuration
 app.config.update({'DB_USER': os.environ['IDBS_USER'],
@@ -13,9 +17,10 @@ app.config.update({'DB_USER': os.environ['IDBS_USER'],
                    'DEBUG': True,
                    'QUERIES_PATH': 'queries.sql'})
 
+
 @app.route('/')
 def home():
-    #con = get_db(app, g)
+    con = get_db(app, g)
     return render_template('index.html')
 
 
@@ -30,6 +35,7 @@ def search():
                     ('tuple1_1', 'tuple1_2', 'tuple1_3'),
                     ('tuple2_1', 'tuple2_2', 'tuple2_3'),
                     ('tuple3_1', 'tuple3_2', 'tuple3_3')])
+
 
 @app.route('/queries', methods=['GET', 'POST'])
 def queries():
@@ -47,6 +53,7 @@ def queries():
         names.append(descr[0])
     data.insert(0,names)
     return jsonify(data)
+
 
 @app.route('/get_table_names', methods=['GET'])
 def get_table_names():

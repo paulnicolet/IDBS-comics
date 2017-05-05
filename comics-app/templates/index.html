@@ -2,36 +2,37 @@
 
 <html>
 
-    <head>
-        <title>IDBS-comics</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/uikit.min.css') }}" />
-        <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/uikit.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/uikit-icons.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<head>
+    <title>IDBS-comics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/uikit.min.css') }}" />
+    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/uikit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/uikit-icons.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js" integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer" crossorigin="anonymous"></script>
-    </head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js" integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer"
+        crossorigin="anonymous"></script>
+</head>
 
 
-    <body>
+<body>
 
-    	<div class="uk-container">
-            <h1><a class="uk-link-reset" href="/">IDBS-comics <span uk-icon="icon: heart"></span></a></h1>
-    		<ul id="tabs" uk-tab>
-    			<li class="uk-active" id="search-tab"><a href="">Search</a></li>
-    			<li id="queries-tab"><a href="">Queries</a></li>
-    			<li id="insert-tab"><a href="">Insert</a></li>
-    			<li id="delete-tab"><a href="">Delete</a></li>
-			</ul>
+    <div class="uk-container">
+        <h1><a class="uk-link-reset" href="/">IDBS-comics <span uk-icon="icon: heart"></span></a></h1>
+        <ul id="tabs" uk-tab>
+            <li class="uk-active" id="search-tab"><a href="">Search</a></li>
+            <li id="queries-tab"><a href="">Queries</a></li>
+            <li id="insert-tab"><a href="">Insert</a></li>
+            <li id="delete-tab"><a href="">Delete</a></li>
+        </ul>
 
-            <div class="uk-flex uk-flex-around" id="db-interface"></div>
+        <div class="uk-flex uk-flex-center" id="db-interface"></div>
 
-            <div class="data-section uk-container uk-container-small">
-                <table class="uk-table uk-table-striped uk-table-small uk-table-hover" id="data-table"></table>
-            </div>
-    	</div>
+        <div class="data-section">
+            <table class="uk-table uk-table-striped uk-table-small uk-table-hover" id="data-table"></table>
+        </div>
+    </div>
 
-    </body>
+</body>
 
 </html>
