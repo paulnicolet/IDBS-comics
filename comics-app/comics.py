@@ -1,5 +1,5 @@
 from flask import Flask, g, render_template, request, jsonify
-from utils import get_db
+from utils import get_db,get_queries
 import os
 
 app = Flask(__name__)
@@ -10,8 +10,8 @@ app.config.update({'DB_USER': os.environ['IDBS_USER'],
                    'DB_SERVER': 'diassrv2.epfl.ch',
                    'DB_PORT': 1521,
                    'DB_SID': 'orcldias',
-                   'DEBUG': True})
-
+                   'DEBUG': True
+                   'QUERIES_PATH': 'queries.sql'})
 
 @app.route('/')
 def home():
@@ -32,6 +32,10 @@ def search():
                     ('tuple2_1', 'tuple2_2', 'tuple2_3'),
                     ('tuple3_1', 'tuple3_2', 'tuple3_3')])
 
+@app.route('/queries', methods=['GET', 'POST'])
+def queries(:
+    if request.method == 'GET':
+        return render_template('queries-form.html',queries = get_queries(g))
 
 @app.route('/get_table_names', methods=['GET'])
 def get_table_names():

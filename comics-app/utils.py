@@ -14,3 +14,16 @@ def get_db(app, context):
                                        dsn_tns)
 
     return context.db
+
+def get_queries(app, context):
+    if not hasattr(context, 'queries'):
+        with open(app['QUERIES_PATH'],'r') as fd:
+            sqlFile = fd.read()
+
+        # all SQL commands (split on ';')
+        sqlCommands = sqlFile.split(';')
+        context.queries = {}
+        for command in sqlCommands:
+            query = command.split(':')
+            context.queries[query[0].replace(r'\s--\s','')] = query[1]
+    return context.queries

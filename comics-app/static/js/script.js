@@ -4,11 +4,15 @@ $(document).ready(function () {
 
 function initTabs() {
     // Search is active by default, so load it first
-    buildSearch();
+     buildSearch();
 
     // Init search tab
     $('#search-tab').on('click', function() {
         buildSearch();
+    });
+
+    $('#queries-tab').on('click', function() {
+        buildQueries();
     });
 }
 
@@ -38,6 +42,10 @@ function buildSearch() {
             });
         });
     });
+}
+
+function buildQueries(){
+    $('#db-interface').load('/queries', function() {})
 }
 
 function displayData(data) {
