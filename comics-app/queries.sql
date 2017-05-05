@@ -35,7 +35,7 @@ WHERE S.country_id = C.id AND
 ;
 
 --Starting from 1990, print the number of issues published each year:
-SELECT I.publication_date, COUNT(*)
+SELECT I.publication_date, COUNT(*) as NUMBER_OF_ISSUES
 FROM Issues I
 WHERE I.publication_date >= '1990'
 GROUP BY I.publication_date
