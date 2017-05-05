@@ -45,7 +45,7 @@ ORDER BY I.publication_date ASC
 --Print the number of series for each indicia publisher whose name resembles ‘DC comics’:
 SELECT IP.name, COUNT(*)
 FROM Indicia_Publisher IP, Series S, Publisher P
-WHERE IP.name LIKE ('%DC comics%') AND
+WHERE IP.name LIKE ('%DC Comics%') AND
 	IP.publisher_id = P.id AND
 	S.publisher_id = P.id
 GROUP BY IP.name

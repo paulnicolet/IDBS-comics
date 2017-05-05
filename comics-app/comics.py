@@ -26,7 +26,6 @@ def search():
         return render_template('search-form.html')
 
     # If POST, process the query and return data
-    print(request.form)
     return jsonify([('COLUMN1', 'COLUMN2', 'COLUMN3'),
                     ('tuple1_1', 'tuple1_2', 'tuple1_3'),
                     ('tuple2_1', 'tuple2_2', 'tuple2_3'),
@@ -37,13 +36,17 @@ def queries():
     if request.method == 'GET':
         return render_template('queries-form.html', queries=get_queries(app, g))
 
-    print(list(request.form.keys()))
     query_key = request.form['query-selector']
     query = get_queries(app, g)[query_key]
     con = get_db(app, g)
-    res = con.cursor().execute(query).fetchall()
-    print(res)
-    return jsonify(res)
+    cur = con.cursor()
+    cur.execute(query)
+    data = cur.fetchall()
+    names = []
+    for descr in cur.description:
+        names.append(descr[0])
+    data.insert(0,names)
+    return jsonify(data)
 
 @app.route('/get_table_names', methods=['GET'])
 def get_table_names():
