@@ -57,4 +57,11 @@ def queries():
 
 @app.route('/get_table_names', methods=['GET'])
 def get_table_names():
-    return jsonify(['Story', 'Issues', 'Series'])
+    sqlCommand = """
+    SELECT table_name
+    FROM user_tables"""
+    con = get_db(app, g)
+    cur = con.cursor()
+    cur.execute(sqlCommand)
+    data = cur.fetchall()
+    return jsonify(data)

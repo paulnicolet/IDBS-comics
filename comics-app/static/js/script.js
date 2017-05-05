@@ -61,7 +61,7 @@ function displayData(data) {
     var firstRow = $("<tr></tr>");
     data.shift().forEach(function(name) {
         var cell = $('<th></th>');
-        cell.append(name);
+        cell.append(name.replace(/_/g,' '));
         firstRow.append(cell);
     });
 
