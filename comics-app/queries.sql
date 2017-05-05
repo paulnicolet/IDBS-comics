@@ -36,7 +36,7 @@ WHERE S.country_id = C.id AND
 
 --Starting from 1990, print the number of issues published each year:
 SELECT I.publication_date, COUNT(*)
-FROM Issue I
+FROM Issues I
 WHERE I.publication_date >= '1990'
 GROUP BY I.publication_date
 ORDER BY I.publication_date ASC
@@ -45,7 +45,7 @@ ORDER BY I.publication_date ASC
 --Print the number of series for each indicia publisher whose name resembles ‘DC comics’:
 SELECT IP.name, COUNT(*)
 FROM Indicia_Publisher IP, Series S, Publisher P
-WHERE IP.name LIKE ('%DC comics%') AND
+WHERE IP.name LIKE ('%DC Comics%') AND
 	IP.publisher_id = P.id AND
 	S.publisher_id = P.id
 GROUP BY IP.name
