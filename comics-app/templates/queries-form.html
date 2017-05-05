@@ -1,7 +1,12 @@
-<form>
-    <select class="uk-select">
-        {% for query in queries%}
-            <option>{{ query }}</option>
-        {% endfor %}
-    </select>
+<form id="queries-form" action="/queries" method="post" >
+    <div uk-grid>
+        <select class="uk-select uk-width-4-5" name = "query-selector" >
+            {% for query in queries %}
+                <option value = "{{query}}">{{ query }}</option>
+            {% endfor %}
+        </select>
+        <div class="uk-width-1-5">
+            <button class="uk-button uk-button-primary"> Search </button>
+        </div>
+    </div>
 </form>

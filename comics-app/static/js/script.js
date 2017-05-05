@@ -45,7 +45,12 @@ function buildSearch() {
 }
 
 function buildQueries(){
-    $('#db-interface').load('/queries', function() {})
+    $('#db-interface').load('/queries', function() {
+
+        $('#queries-form').ajaxForm(function(data) {
+        displayData(data);
+        });
+    })
 }
 
 function displayData(data) {
