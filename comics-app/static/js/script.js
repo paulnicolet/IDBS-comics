@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(() => {
     initTabs();
 });
 
@@ -14,12 +14,12 @@ function initTabs() {
     buildSearch();
 
     // Init search tab
-    $('#search-tab').on('click', function () {
+    $('#search-tab').on('click', () => {
         cacheTab();
         buildSearch();
     });
 
-    $('#queries-tab').on('click', function () {
+    $('#queries-tab').on('click', () => {
         cacheTab();
         buildQueries();
     });
@@ -51,21 +51,17 @@ function buildSearch() {
         $('#db-interface').html(cache.forms['search-tab']);
 
         // Register the form
-        $('#search-form').ajaxForm(function (data) {
-            displayData(data);
-        });
+        asyncForm($('#search-form'));
     } else {
         // Not in cache
         // Load the form
-        $('#db-interface').load('/search', function () {
+        $('#db-interface').load('/search', () => {
             // Register the form
-            $('#search-form').ajaxForm(function (data) {
-                displayData(data);
-            });
+            asyncForm($('#search-form'));
 
             // Load the tables names and fill the advanced options
-            $.ajax('/get_table_names').done(function (data) {
-                data.forEach(function (name) {
+            $.ajax('/get_table_names').done(data => {
+                data.forEach(name => {
                     name = ' ' + name + ' ';
 
                     // Create checkbox
@@ -93,15 +89,11 @@ function buildQueries() {
         $('#db-interface').html(cache.forms['queries-tab']);
         var selector = ':contains("' + cache.selected_query + '")';
         $('#query-selector').children(selector).prop('selected', true);
-        $('#queries-form').ajaxForm(function (data) {
-            displayData(data);
-        });
+        asyncForm($('#queries-form'));
     } else {
         // Not in cache
-        $('#db-interface').load('/queries', function () {
-            $('#queries-form').ajaxForm(function (data) {
-                displayData(data);
-            });
+        $('#db-interface').load('/queries', () => {
+            asyncForm($('#queries-form'));
         });
     }
 }
@@ -112,7 +104,7 @@ function displayData(data) {
     // Build header
     var head = $("<thead></thead>");
     var firstRow = $("<tr></tr>");
-    data.shift().forEach(function (name) {
+    data.shift().forEach(name => {
         var cell = $('<th></th>');
         cell.append(name.replace(/_/g, ' '));
         firstRow.append(cell);
@@ -123,11 +115,11 @@ function displayData(data) {
 
     // Build actual table
     var body = $("<tbody></tbody>");
-    data.forEach(function (tuple) {
+    data.forEach(tuple => {
         // For each tuple, build the row
         var row = $("<tr></tr>");
 
-        tuple.forEach(function (name) {
+        tuple.forEach(name => {
             // For each element, build the cell
             var cell = $('<td></td>');
             cell.append(name);
@@ -142,4 +134,14 @@ function displayData(data) {
 
     // Insert body in the table
     table.append(body);
+}
+
+/**
+ * Register a form element to submit with AJAX.
+ * @param {jQuery} elem - Form element
+ */
+function asyncForm(elem) {
+    elem.ajaxForm(data => {
+        displayData(data);
+    });
 }
