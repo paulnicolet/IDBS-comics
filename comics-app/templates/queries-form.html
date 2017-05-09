@@ -1,6 +1,6 @@
 <form id="queries-form" action="/queries" method="post">
     <div class="uk-flex uk-flex-column uk-flex-middle">
-        <select class="uk-select" name="query-selector">
+        <select class="uk-select" id="query-selector" name="query-selector">
             {% for query in queries %}
             <option value="{{query}}">{{ query }}</option>
             {% endfor %}

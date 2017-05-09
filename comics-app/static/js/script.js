@@ -15,28 +15,44 @@ function initTabs() {
 
     // Init search tab
     $('#search-tab').on('click', function () {
+        cacheTab();
         buildSearch();
     });
 
     $('#queries-tab').on('click', function () {
+        cacheTab();
         buildQueries();
     });
 }
 
+function cacheTab() {
+    // Get active tab
+    var active;
+    $('#tabs').children().each((idx, tab) => {
+        if (tab.className == 'uk-active') {
+            active = tab.id;
+        }
+    });
+
+    cache.forms[active] = $('#db-interface').html();
+    cache.tables[active] = $('#data-table').html();
+
+    if (active == 'queries-tab') {
+        cache.selected_query = $('#query-selector').find(":selected").text();
+    }
+}
+
 function buildSearch() {
     // Restore cached data
-    $('#data-table').html(cache.tables.search || '');
+    $('#data-table').html(cache.tables['search-tab'] || '');
 
-    // Restore cached form
-    if (cache.forms.search) {
-        $('#db-interface').html(cache.forms.search);
+    if (cache.forms['search-tab']) {
+        // Restore cached form
+        $('#db-interface').html(cache.forms['search-tab']);
 
         // Register the form
         $('#search-form').ajaxForm(function (data) {
             displayData(data);
-
-            // Cache table content
-            cache.tables.search = $('#data-table').html();
         });
     } else {
         // Not in cache
@@ -45,9 +61,6 @@ function buildSearch() {
             // Register the form
             $('#search-form').ajaxForm(function (data) {
                 displayData(data);
-
-                // Cache table content
-                cache.tables.search = $('#data-table').html();
             });
 
             // Load the tables names and fill the advanced options
@@ -65,9 +78,6 @@ function buildSearch() {
                     label.append(name);
 
                     $('#tables-checkboxes').append(label);
-
-                    // Cache result
-                    cache.forms.search = $('#db-interface').html();
                 });
             });
         });
@@ -76,29 +86,22 @@ function buildSearch() {
 
 function buildQueries() {
     // Restore cached data
-    $('#data-table').html(cache.tables.queries || '');
+    $('#data-table').html(cache.tables['queries-tab'] || '');
 
-    // Restore cached form
-    if (cache.forms.queries) {
-        $('#db-interface').html(cache.forms.queries);
+    if (cache.forms['queries-tab']) {
+        // Restore cached form
+        $('#db-interface').html(cache.forms['queries-tab']);
+        var selector = ':contains("' + cache.selected_query + '")';
+        $('#query-selector').children(selector).prop('selected', true);
         $('#queries-form').ajaxForm(function (data) {
             displayData(data);
-
-            // Cache table content
-            cache.tables.queries = $('#data-table').html();
         });
     } else {
         // Not in cache
         $('#db-interface').load('/queries', function () {
             $('#queries-form').ajaxForm(function (data) {
                 displayData(data);
-
-                // Cache table content
-                cache.tables.queries = $('#data-table').html();
             });
-
-            // Cache form
-            cache.forms.queries = $('#db-interface').html();
         });
     }
 }
