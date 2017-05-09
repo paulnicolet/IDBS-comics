@@ -61,20 +61,7 @@ function buildSearch() {
 
             // Load the tables names and fill the advanced options
             $.ajax('/get_table_names').done(data => {
-                data.forEach(name => {
-                    name = ' ' + name + ' ';
-
-                    // Create checkbox
-                    var input = $('<input class="uk-checkbox" type="checkbox" checked>');
-                    input.attr('name', name);
-
-                    // Add label
-                    var label = $('<label></label>');
-                    label.append(input);
-                    label.append(name);
-
-                    $('#tables-checkboxes').append(label);
-                });
+                buildAdvancedOptions(data);
             });
         });
     }
@@ -96,6 +83,23 @@ function buildQueries() {
             asyncForm($('#queries-form'));
         });
     }
+}
+
+function buildAdvancedOptions(data) {
+    data.forEach(name => {
+        name = ' ' + name + ' ';
+
+        // Create checkbox
+        var input = $('<input class="uk-checkbox" type="checkbox" checked>');
+        input.attr('name', name);
+
+        // Add label
+        var label = $('<label></label>');
+        label.append(input);
+        label.append(name);
+
+        $('#tables-checkboxes').append(label);
+    });
 }
 
 function displayData(data) {
