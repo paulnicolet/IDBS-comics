@@ -141,11 +141,28 @@ function displayData(data) {
 }
 
 /**
+ * Add or remove the spinner element above data table depending 
+ * if it is present or not.
+ */
+function spinner() {
+    if ($('#spinner').length) {
+        $('#spinner').remove();
+    } else {
+        $('#spinner-slot').append($('<div id="spinner" uk-spinner></div>'));
+    }
+}
+
+/**
  * Register a form element to submit with AJAX.
  * @param {jQuery} elem - Form element
  */
 function asyncForm(elem) {
-    elem.ajaxForm(data => {
-        displayData(data);
+    elem.ajaxForm({
+        beforeSend: spinner,
+
+        success: data => {
+            spinner();
+            displayData(data);
+        }
     });
 }
