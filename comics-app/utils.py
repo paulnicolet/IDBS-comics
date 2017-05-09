@@ -1,3 +1,5 @@
+from flask import abort, request
+from functools import wraps
 import cx_Oracle
 import re
 
@@ -37,3 +39,13 @@ def get_queries(app, context):
 def shutdown(app, context):
     with app.app_context():
         get_db(app, context).close()
+
+
+def ajax(f):
+    """ Custom decoractor to restrict acces to AJAX calls """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not request.is_xhr:
+            return abort(401)
+        return f(*args, **kwargs)
+    return decorated_function

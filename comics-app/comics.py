@@ -1,5 +1,5 @@
 from flask import Flask, g, render_template, request, jsonify
-from utils import get_db, get_queries, shutdown
+from utils import get_db, get_queries, shutdown, ajax
 import os
 import atexit
 
@@ -25,6 +25,7 @@ def home():
 
 
 @app.route('/search', methods=['GET', 'POST'])
+@ajax
 def search():
     # If GET, return the form to render
     if request.method == 'GET':
@@ -38,6 +39,7 @@ def search():
 
 
 @app.route('/queries', methods=['GET', 'POST'])
+@ajax
 def queries():
     if request.method == 'GET':
         return render_template('queries-form.html', queries=get_queries(app, g))
@@ -51,11 +53,12 @@ def queries():
     names = []
     for descr in cur.description:
         names.append(descr[0])
-    data.insert(0,names)
+    data.insert(0, names)
     return jsonify(data)
 
 
 @app.route('/get_table_names', methods=['GET'])
+@ajax
 def get_table_names():
     sqlCommand = """
     SELECT table_name
