@@ -1,5 +1,5 @@
 from flask import Flask, g, render_template, request, jsonify
-from utils import get_db, get_queries, shutdown, ajax
+from utils import get_db, get_queries, shutdown, ajax, execute_query, prepend_schema
 import os
 import atexit
 
@@ -44,27 +44,17 @@ def queries():
     if request.method == 'GET':
         return render_template('queries-form.html', queries=get_queries(app, g))
 
+    # Get query and execute it
     query_key = request.form['query-selector']
     query = get_queries(app, g)[query_key]
-    con = get_db(app, g)
-    cur = con.cursor()
-    cur.execute(query)
-    data = cur.fetchall()
-    names = []
-    for descr in cur.description:
-        names.append(descr[0])
-    data.insert(0, names)
-    return jsonify(data)
+    (data, description) = execute_query(app, g, query)
+
+    return jsonify(prepend_schema(description, data))
 
 
 @app.route('/get_table_names', methods=['GET'])
 @ajax
 def get_table_names():
-    sqlCommand = """
-    SELECT table_name
-    FROM user_tables"""
-    con = get_db(app, g)
-    cur = con.cursor()
-    cur.execute(sqlCommand)
-    data = cur.fetchall()
+    query = 'SELECT table_name FROM user_tables'
+    data = executeQuery(app, g, query)[0]
     return jsonify(data)
