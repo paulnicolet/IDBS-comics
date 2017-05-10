@@ -116,11 +116,7 @@ function displayData(tables) {
     $('#data-section .uk-table').remove();
 
     // Append tables only if there are tuples
-    tables.forEach(table => {
-        if (table[2].length != 0) {
-            appendTable(table[0], table[1], table[2]);
-        }
-    })
+    tables.forEach(table => { appendTable(table[0], table[1], table[2]) })
 }
 
 function appendTable(name, schema, data) {
@@ -134,7 +130,7 @@ function appendTable(name, schema, data) {
     var firstRow = $("<tr></tr>");
     schema.forEach(name => {
         var cell = $('<th></th>');
-        cell.append(name/*.replace(/_/g, ' ')*/);
+        cell.append(name.replace(/_/g, ' '));
         firstRow.append(cell);
     });
 
