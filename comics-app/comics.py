@@ -56,5 +56,5 @@ def queries():
 @ajax
 def get_table_names():
     query = 'SELECT table_name FROM user_tables'
-    data = executeQuery(app, g, query)[0]
+    data = execute_query(app, g, query)[0]
     return jsonify(data)
