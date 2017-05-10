@@ -43,17 +43,38 @@ def execute_query(app, context, query):
     cur.execute(query)
 
     # Return data with description
-    return (cur.fetchall(), cur.description)
+    return (extract_schema(cur.description), cur.fetchall())
 
 
-def prepend_schema(description, data):
-    """ Add schema to the data from cursor description """
+def generic_search(keywords, tables, app, context):
+    # List of tuples (table_name, schema, tuples)
+    result = []
+    for table in tables:
+        # Get columns for the table
+        query = 'SELECT * FROM {} WHERE 1=0'.format(table)
+        description = execute_query(app, context, query)[0]
+
+        # Build conditions
+        conditions = []
+        for col in description:
+            conditions.append('{} LIKE \'%{}%\''.format(col, keywords))
+
+        conditions = ' OR '.join(conditions)
+
+        # Execute query
+        query = 'SELECT * FROM {} WHERE {}'.format(table, conditions)
+        (schema, data) = execute_query(app, context, query)
+        result.append((table, schema, data))
+
+    return result
+
+
+def extract_schema(description):
     names = []
     for col in description:
         names.append(col[0])
-    data.insert(0, names)
 
-    return data
+    return names
 
 
 def shutdown(app, context):

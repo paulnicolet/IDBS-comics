@@ -1,5 +1,5 @@
 from flask import Flask, g, render_template, request, jsonify
-from utils import get_db, get_queries, shutdown, ajax, execute_query, prepend_schema
+from utils import get_db, get_queries, shutdown, ajax, execute_query, generic_search
 import os
 import atexit
 
@@ -32,10 +32,12 @@ def search():
         return render_template('search-form.html')
 
     # If POST, process the query and return data
-    return jsonify([('COLUMN1', 'COLUMN2', 'COLUMN3'),
-                    ('tuple1_1', 'tuple1_2', 'tuple1_3'),
-                    ('tuple2_1', 'tuple2_2', 'tuple2_3'),
-                    ('tuple3_1', 'tuple3_2', 'tuple3_3')])
+    keywords = request.form['keywords']
+    tables = list(request.form.keys())
+    tables.remove('keywords')
+
+    data = generic_search(keywords, tables, app, g)
+    return jsonify(data)
 
 
 @app.route('/queries', methods=['GET', 'POST'])
@@ -47,14 +49,14 @@ def queries():
     # Get query and execute it
     query_key = request.form['query-selector']
     query = get_queries(app, g)[query_key]
-    (data, description) = execute_query(app, g, query)
+    (schema, data) = execute_query(app, g, query)
 
-    return jsonify(prepend_schema(description, data))
+    return jsonify([('', schema, data)])
 
 
 @app.route('/get_table_names', methods=['GET'])
 @ajax
 def get_table_names():
     query = 'SELECT table_name FROM user_tables'
-    data = execute_query(app, g, query)[0]
+    data = execute_query(app, g, query)[1]
     return jsonify(data)

@@ -34,8 +34,9 @@ function cacheTab() {
         }
     });
 
+    // Cache data
     cache.forms[active] = $('#db-interface').html();
-    cache.tables[active] = $('#data-table').html();
+    cache.tables[active] = $('#data-section').html();
 
     if (active == 'queries-tab') {
         cache.selected_query = $('#query-selector').find(":selected").text();
@@ -43,10 +44,10 @@ function cacheTab() {
 }
 
 function buildSearch() {
-    // Restore cached data
-    $('#data-table').html(cache.tables['search-tab'] || '');
-
     if (cache.forms['search-tab']) {
+        // Restore cached data
+        $('#data-section').html(cache.tables['search-tab'] || '');
+
         // Restore cached form
         $('#db-interface').html(cache.forms['search-tab']);
 
@@ -54,7 +55,7 @@ function buildSearch() {
         asyncForm($('#search-form'));
 
         // Replace options in the form after hiding it
-        $('#search-advanced-options').on('hide', () => {
+        $('#search-advanced-options').on('hidden', () => {
             $('#search-form').append($('#search-advanced-options'));
         });
     } else {
@@ -73,10 +74,10 @@ function buildSearch() {
 }
 
 function buildQueries() {
-    // Restore cached data
-    $('#data-table').html(cache.tables['queries-tab'] || '');
-
     if (cache.forms['queries-tab']) {
+        // Restore cached data
+        $('#data-section').html(cache.tables['queries-tab'] || '');
+
         // Restore cached form
         $('#db-interface').html(cache.forms['queries-tab']);
         var selector = ':contains("' + cache.selected_query + '")';
@@ -105,25 +106,40 @@ function buildAdvancedOptions(data) {
     });
 
     // Replace options in the form after hiding it
-    $('#search-advanced-options').on('hide', () => {
+    $('#search-advanced-options').on('hidden', () => {
         $('#search-form').append($('#search-advanced-options'));
     });
 }
 
-function displayData(data) {
-    var table = $('#data-table');
+function displayData(tables) {
+    // Clear existing tables
+    $('#data-section .uk-table').remove();
+
+    // Append tables only if there are tuples
+    tables.forEach(table => {
+        if (table[2].length != 0) {
+            appendTable(table[0], table[1], table[2]);
+        }
+    })
+}
+
+function appendTable(name, schema, data) {
+    var table = $('<table class="uk-table uk-table-striped uk-table-small uk-table-hover"></table>');
+
+    // Insert caption
+    table.html($('<caption></caption>').html(name));
 
     // Build header
     var head = $("<thead></thead>");
     var firstRow = $("<tr></tr>");
-    data.shift().forEach(name => {
+    schema.forEach(name => {
         var cell = $('<th></th>');
-        cell.append(name.replace(/_/g, ' '));
+        cell.append(name/*.replace(/_/g, ' ')*/);
         firstRow.append(cell);
     });
 
     head.append(firstRow);
-    table.html(head);
+    table.append(head);
 
     // Build actual table
     var body = $("<tbody></tbody>");
@@ -146,6 +162,9 @@ function displayData(data) {
 
     // Insert body in the table
     table.append(body);
+
+    // Insert table into data section
+    $('#data-section').append(table);
 }
 
 /**
@@ -156,7 +175,7 @@ function spinner() {
     if ($('#spinner').length) {
         $('#spinner').remove();
     } else {
-        $('#spinner-slot').append($('<div id="spinner" uk-spinner></div>'));
+        $('#spinner-slot').append($('<div class="uk-padding" id="spinner" uk-spinner></div>'));
     }
 }
 
