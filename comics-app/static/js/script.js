@@ -52,6 +52,11 @@ function buildSearch() {
 
         // Register the form
         asyncForm($('#search-form'));
+
+        // Replace options in the form after hiding it
+        $('#search-advanced-options').on('hide', () => {
+            $('#search-form').append($('#search-advanced-options'));
+        });
     } else {
         // Not in cache
         // Load the form
@@ -87,8 +92,6 @@ function buildQueries() {
 
 function buildAdvancedOptions(data) {
     data.forEach(name => {
-        name = ' ' + name + ' ';
-
         // Create checkbox
         var input = $('<input class="uk-checkbox" type="checkbox" checked>');
         input.attr('name', name);
@@ -96,9 +99,14 @@ function buildAdvancedOptions(data) {
         // Add label
         var label = $('<label></label>');
         label.append(input);
-        label.append(name);
+        label.append(' ' + name);
 
         $('#tables-checkboxes').append(label);
+    });
+
+    // Replace options in the form after hiding it
+    $('#search-advanced-options').on('hide', () => {
+        $('#search-form').append($('#search-advanced-options'));
     });
 }
 
