@@ -1,86 +1,53 @@
-from flask import abort, request
+from flask import abort, request, g
 from functools import wraps
 import cx_Oracle
 import re
 
 
-def get_db(app, context):
-    """ Connect to the database and return connection """
-    if not hasattr(context, 'db'):
-        dsn_tns = cx_Oracle.makedsn(app.config['DB_SERVER'],
-                                    app.config['DB_PORT'],
-                                    app.config['DB_SID'])
-
-        context.db = cx_Oracle.connect(app.config['DB_USER'],
-                                       app.config['DB_PWD'],
-                                       dsn_tns)
-
-    return context.db
-
-
-def get_queries(app, context):
-    """ Parse and return predefined queries """
-    if not hasattr(context, 'queries'):
-        with open(app.config['QUERIES_PATH'], 'r') as fd:
-            sqlFile = fd.read()
-
-        # all SQL commands (split on ';')
-        sqlCommands = sqlFile.split(';')
-        context.queries = {}
-        for command in sqlCommands:
-            command = re.sub(r'\s*--\s*|\s*\n\s*', ' ', command)
-            query = command.split(':')
-            context.queries[query[0]] = query[1]
-
-    return context.queries
-
-
-def execute_query(app, context, query):
+def execute_query(con, query, **kwargs):
     """ Execute a query and return corresponding data """
     # Execute query
-    con = get_db(app, context)
     cur = con.cursor()
-    cur.execute(query)
+    cur.execute(query, kwargs)
 
     # Return data with description
     return (extract_schema(cur.description), cur.fetchall())
 
 
-def generic_search(keywords, tables, app, context):
+def generic_search(con, keywords, tables):
+    """ Perform a search in the given tables for containment of given keywords """
     # List of tuples (table_name, schema, tuples)
     result = []
+    table_names = get_table_names(con)
     for table in tables:
-        # Get columns for the table
-        query = 'SELECT * FROM {} WHERE 1=0'.format(table)
-        description = execute_query(app, context, query)[0]
+        # Make sure user didn't cheat with table names
+        if table not in table_names:
+            raise ValueError('Invalid table name')
 
         # Build conditions
         conditions = []
-        for col in description:
-            conditions.append('{} LIKE \'%{}%\''.format(col, keywords))
+        for col in get_column_names(con, table):
+            conditions.append('{} LIKE \'%\'||:keywords||\'%\''.format(col))
 
         conditions = ' OR '.join(conditions)
 
         # Execute query
         query = 'SELECT * FROM {} WHERE {}'.format(table, conditions)
-        (schema, data) = execute_query(app, context, query)
-        result.append((table, schema, data))
+        (schema, data) = execute_query(con, query, keywords=keywords)
+
+        if len(data) > 0:
+            result.append((table, schema, data))
 
     return result
 
 
 def extract_schema(description):
+    """ Extract column names from cursor description """
     names = []
     for col in description:
         names.append(col[0])
 
     return names
-
-
-def shutdown(app, context):
-    """ Clean-up application state before shutdown """
-    with app.app_context():
-        get_db(app, context).close()
 
 
 def ajax(f):
@@ -91,3 +58,47 @@ def ajax(f):
             return abort(401)
         return f(*args, **kwargs)
     return decorated_function
+
+
+def get_db(app):
+    """ Connect to the database and return connection """
+    if not hasattr(g, 'db'):
+        dsn_tns = cx_Oracle.makedsn(app.config['DB_SERVER'],
+                                    app.config['DB_PORT'],
+                                    app.config['DB_SID'])
+
+        g.db = cx_Oracle.connect(app.config['DB_USER'],
+                                 app.config['DB_PWD'],
+                                 dsn_tns)
+
+    return g.db
+
+
+def get_queries(app, context):
+    """ Parse, cache and return predefined queries """
+    if 'queries' not in context:
+        with open(app.config['QUERIES_PATH'], 'r') as fd:
+            sqlFile = fd.read()
+
+        # all SQL commands (split on ';')
+        sqlCommands = sqlFile.split(';')
+        context['queries'] = {}
+        for command in sqlCommands:
+            command = re.sub(r'\s*--\s*|\s*\n\s*', ' ', command)
+            query = command.split(':')
+            context['queries'][query[0]] = query[1]
+
+    return context['queries']
+
+
+def get_table_names(con):
+    """ Return database tables names """
+    query = 'SELECT table_name FROM user_tables'
+    data = execute_query(con, query)[1]
+    return list(map(lambda x: x[0], data))
+
+
+def get_column_names(con, table):
+    """ Return table column names """
+    query = 'SELECT * FROM {} WHERE 1=0'.format(table)
+    return execute_query(con, query)[0]

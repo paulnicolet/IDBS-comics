@@ -1,12 +1,11 @@
-from flask import Flask, g, render_template, request, jsonify
-from utils import get_db, get_queries, shutdown, ajax, execute_query, generic_search
+from flask import Flask, g, render_template, request, jsonify, abort
+from utils import get_db, get_queries, ajax, execute_query, generic_search
+import utils
 import os
 import atexit
 
 app = Flask(__name__)
-
-# Register clean up function
-atexit.register(shutdown, app=app, context=g)
+context = {}
 
 # Set app configuration
 app.config.update({'DB_USER': os.environ['IDBS_USER'],
@@ -20,7 +19,7 @@ app.config.update({'DB_USER': os.environ['IDBS_USER'],
 
 @app.route('/')
 def home():
-    con = get_db(app, g)
+    con = get_db(app)
     return render_template('index.html')
 
 
@@ -36,20 +35,24 @@ def search():
     tables = list(request.form.keys())
     tables.remove('keywords')
 
-    data = generic_search(keywords, tables, app, g)
-    return jsonify(data)
+    try:
+        data = generic_search(get_db(app), keywords, tables)
+        return jsonify(data)
+    except ValueError:
+        # Invalid user input
+        return abort(401)
 
 
 @app.route('/queries', methods=['GET', 'POST'])
 @ajax
 def queries():
     if request.method == 'GET':
-        return render_template('queries-form.html', queries=get_queries(app, g))
+        return render_template('queries-form.html', queries=get_queries(app, context))
 
     # Get query and execute it
     query_key = request.form['query-selector']
-    query = get_queries(app, g)[query_key]
-    (schema, data) = execute_query(app, g, query)
+    query = get_queries(app, context)[query_key]
+    (schema, data) = execute_query(get_db(app), query)
 
     return jsonify([('', schema, data)])
 
@@ -57,6 +60,11 @@ def queries():
 @app.route('/get_table_names', methods=['GET'])
 @ajax
 def get_table_names():
-    query = 'SELECT table_name FROM user_tables'
-    data = execute_query(app, g, query)[1]
-    return jsonify(data)
+    return jsonify(utils.get_table_names(get_db(app)))
+
+
+@app.teardown_appcontext
+def close_db(error):
+    """Closes the database again at the end of the request."""
+    if hasattr(g, 'db'):
+        g.db.close()
