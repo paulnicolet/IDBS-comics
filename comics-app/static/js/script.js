@@ -92,6 +92,27 @@ function buildQueries() {
 }
 
 function buildAdvancedOptions(data) {
+    // Build select all option
+    var checkall = $('<input class="uk-checkbox" id="checkall" type="checkbox" checked>');
+    var label = $('<label></label>');
+    label.append(checkall);
+    label.append(' SELECT ALL');
+
+    checkall.on('change', () => {
+        var boxes = $('#tables-checkboxes').find('.uk-checkbox');
+        boxes.each((idx, box) => {
+            if ($(box).attr('id') != 'checkall') {
+                if ($('#checkall').prop('checked')) {
+                    $(box).prop('checked', true);
+                } else {
+                    $(box).prop('checked', false);
+                }
+            }
+        });
+    });
+
+    $('#tables-checkboxes').append(label);
+
     data.forEach(name => {
         // Create checkbox
         var input = $('<input class="uk-checkbox" type="checkbox" checked>');
