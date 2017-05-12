@@ -1,0 +1,9 @@
+<form id="insert-form" action="/insert" method="post">
+    <div class="uk-flex uk-flex-column uk-flex-middle">
+        <select class="uk-select" id="table-selector" name="table-selector">
+            {% for table in tables %}
+            <option value="{{table}}">{{ table }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</form>

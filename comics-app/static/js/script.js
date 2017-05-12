@@ -23,6 +23,11 @@ function initTabs() {
         cacheTab();
         buildQueries();
     });
+
+    $('#insert-tab').on('click', () => {
+        cacheTab();
+        buildQueries();
+    });
 }
 
 function cacheTab() {
@@ -164,7 +169,7 @@ function appendTable(name, schema, data) {
 }
 
 /**
- * Add or remove the spinner element above data table depending 
+ * Add or remove the spinner element above data table depending
  * if it is present or not.
  */
 function spinner() {

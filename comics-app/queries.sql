@@ -18,7 +18,7 @@ HAVING COUNT(*) = (SELECT MAX(col)
 ;
 
 --Print the ids and names of publishers of Danish book series:
-SELECT P.id, P.name
+SELECT DISTINCT P.id, P.name
 FROM Series S, Publisher P, Country C
 WHERE S.publisher_id = P.id AND
       S.country_id = C.id AND
