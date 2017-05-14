@@ -59,6 +59,7 @@ function cacheTab() {
     }
 }
 
+/* ------------------------------ Tab builders ------------------------------ */
 function buildSearch() {
     // Restore form
     if (cache.forms['search-tab']) {
@@ -96,6 +97,16 @@ function buildQueries() {
     }
 }
 
+function buildInsert() {
+    $('#db-interface').load('/insert', () => {
+        asyncForm($('#insert-form'), createInsertCells);
+        $('#insert-form').on('change', () => {
+            $('#insert-button').prop("disabled", false);
+            $('#insert-form').submit();
+        })
+    });
+}
+
 function buildDelete() {
     // Restore form
     if (cache.forms['delete-tab']) {
@@ -115,33 +126,16 @@ function buildDelete() {
     deleteOnClick();
 }
 
-function displayClickableData(data) {
-    displayData(data);
-    deleteOnClick();
-}
+/* --------------------------------- Search --------------------------------- */
+function loadSearchForm(callback) {
+    $('#db-interface').load('/search', () => {
+        // Register the form
+        asyncForm($('#search-form'), callback);
 
-function deleteOnClick() {
-    // Select all rows
-    $('tbody tr').on('click', event => {
-        // Get the row and table name
-        var row = $(event.currentTarget);
-        var table = row.closest('table').find('caption').html();
-
-        confirmMsg = 'Do you really want to delete tuple with ID ' + row.attr('id') + ' from the database ?';
-        UIkit.modal.confirm(confirmMsg).then(() => {
-            // Remove row 
-            row.remove();
-
-            // Request server to remove from DB
-            $.ajax('/delete', {
-                data: {
-                    'id': row.attr('id'),
-                    'table': table
-                },
-                method: 'POST',
-                success: () => { console.log('Success') }
-            })
-        }, () => { });
+        // Load the tables names and fill the advanced options
+        $.ajax('/get_table_names').done(data => {
+            buildAdvancedOptions(data);
+        });
     });
 }
 
@@ -157,28 +151,6 @@ function restoreSearchFormEvents(callback) {
     // Register select all button
     $('#checkall').on('change', selectAll);
 }
-function buildInsert() {
-    $('#db-interface').load('/insert', () => {
-        asyncForm($('#insert-form'), createInsertCells);
-        $('#insert-form').on('change', () => {
-            $('#insert-button').prop("disabled", false);
-            $('#insert-form').submit();
-        })
-    });
-}
-
-function createInsertCells(data) {
-    $('#requested-table').empty()
-    for (var key in data) {
-        searchCell = $('<input class="uk-input uk-form-width-medium" type="text">')
-        searchCell.attr('name', key)
-        placeHolder = key.replace('_ID', '')
-        placeHolder = placeHolder.replace(/_/g, ' ')
-        searchCell.attr('placeholder', placeHolder)
-        $('#requested-table').append(searchCell)
-    };
-}
-
 
 function buildAdvancedOptions(data) {
     // Build select all option
@@ -210,18 +182,6 @@ function buildAdvancedOptions(data) {
     });
 }
 
-function loadSearchForm(callback) {
-    $('#db-interface').load('/search', () => {
-        // Register the form
-        asyncForm($('#search-form'), callback);
-
-        // Load the tables names and fill the advanced options
-        $.ajax('/get_table_names').done(data => {
-            buildAdvancedOptions(data);
-        });
-    });
-}
-
 function selectAll() {
     var boxes = $('#tables-checkboxes').find('.uk-checkbox');
     boxes.each((idx, box) => {
@@ -235,12 +195,58 @@ function selectAll() {
     });
 }
 
+/* --------------------------------- Insert --------------------------------- */
+function createInsertCells(data) {
+    $('#requested-table').empty()
+    for (var key in data) {
+        searchCell = $('<input class="uk-input uk-form-width-medium" type="text">')
+        searchCell.attr('name', key)
+        placeHolder = key.replace('_ID', '')
+        placeHolder = placeHolder.replace(/_/g, ' ')
+        searchCell.attr('placeholder', placeHolder)
+        $('#requested-table').append(searchCell)
+    };
+}
+
+/* --------------------------------- Delete --------------------------------- */
+function deleteOnClick() {
+    // Select all rows
+    $('tbody tr').on('click', event => {
+        // Get the row and table name
+        var row = $(event.currentTarget);
+        var table = row.closest('table').find('caption').html();
+
+        confirmMsg = 'Do you really want to delete tuple with ID ' + row.attr('id') + ' from the database ?';
+        UIkit.modal.confirm(confirmMsg).then(() => {
+            // Remove row 
+            row.remove();
+
+            // Request server to remove from DB
+            $.ajax('/delete', {
+                data: {
+                    'id': row.attr('id'),
+                    'table': table
+                },
+                method: 'POST',
+                success: () => { console.log('Success') }
+            })
+        }, () => { });
+    });
+}
+
+/* ---------------------------- Data displaying ----------------------------- */
+
 function displayData(tables) {
     // Clear existing tables
     $('#data-section').find('table').remove();
 
     // Append tables only if there are tuples
     tables.forEach(table => { appendTable(table[0], table[1], table[2]) })
+}
+
+function displayClickableData(data) {
+    displayData(data);
+    deleteOnClick();
 }
 
 function appendTable(name, schema, data) {
@@ -292,6 +298,7 @@ function appendTable(name, schema, data) {
     $('#data-section').append(table);
 }
 
+/* --------------------------------- Others --------------------------------- */
 function spinner() {
     if ($('#spinner').length) {
         $('#spinner').remove();
