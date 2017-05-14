@@ -127,18 +127,28 @@ def create_dict_for_insert(con):
                 #another table
             if 'ID' not in attribut:
                 #clean and insert column name with insert indicator 1
-                col_name = attribut.replace('_',' ')
-                insert_dict[table][col_name] = 1;
+                insert_dict[table][attribut] = {'case':1}
             else:
                 #clean and insert column name with insert indicator 2
-                col_name = attribut.replace('_',' ')
-                col_name = col_name.replace(' ID','')
-                insert_dict[table][col_name] = 2;
+                foreign_table = attribut.replace('_ID','')
+                if foreign_table == "REPRINT_NOTE":
+                    foreign_table = "NOTE"
+                insert_dict[table][attribut] = {
+                    'case':2,
+                    'foreign_table':foreign_table
+                }
         #go through tables and find elements where the names is
         #with type 3 inserts
         for table2 in tables:
-            attributs2  = get_column_names(con,table2):
+            if table2 =='FIRST_LAST_ISSUE':
+                continue
+            attributs2  = get_column_names(con,table2)
             if table+'_ID' == attributs2[0]:
+                foreign_table = attributs2[1].replace('_ID','')
                 col_name = table2.split('_')[-1]
-                insert_dict[table][col_name] = 3;
+                insert_dict[table][col_name] = {
+                    'case':3,
+                    'foreign_table': foreign_table,
+                    'foreign_relation':table2
+                }
     return insert_dict

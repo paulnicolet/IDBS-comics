@@ -26,7 +26,7 @@ function initTabs() {
 
     $('#insert-tab').on('click', () => {
         cacheTab();
-        buildQueries();
+        buildInsert();
     });
 }
 
@@ -57,7 +57,7 @@ function buildSearch() {
         $('#db-interface').html(cache.forms['search-tab']);
 
         // Register the form
-        asyncForm($('#search-form'));
+        asyncForm($('#search-form'), displayData);
 
         // Replace options in the form after hiding it
         $('#search-advanced-options').on('hidden', () => {
@@ -68,7 +68,7 @@ function buildSearch() {
         // Load the form
         $('#db-interface').load('/search', () => {
             // Register the form
-            asyncForm($('#search-form'));
+            asyncForm($('#search-form'), displayData);
 
             // Load the tables names and fill the advanced options
             $.ajax('/get_table_names').done(data => {
@@ -87,14 +87,36 @@ function buildQueries() {
         $('#db-interface').html(cache.forms['queries-tab']);
         var selector = ':contains("' + cache.selected_query + '")';
         $('#query-selector').children(selector).prop('selected', true);
-        asyncForm($('#queries-form'));
+        asyncForm($('#queries-form'), displayData);
     } else {
         // Not in cache
         $('#db-interface').load('/queries', () => {
-            asyncForm($('#queries-form'));
+            asyncForm($('#queries-form'), displayData);
         });
     }
 }
+function buildInsert() {
+    $('#db-interface').load('/insert', () => {
+        asyncForm($('#insert-form'), createInsertCells);
+        $('#insert-form').on('change', () => {
+            $('#insert-button').prop("disabled",false);
+            $('#insert-form').submit();
+        })
+    });
+}
+
+function createInsertCells(data){
+    $('#requested-table').empty()
+    for(var key in data){
+        searchCell = $('<input class="uk-input uk-form-width-medium" type="text">')
+        searchCell.attr('name',key)
+        placeHolder = key.replace('_ID','')
+        placeHolder = placeHolder.replace(/_/g,' ')
+        searchCell.attr('placeholder',placeHolder)
+        $('#requested-table').append(searchCell)
+    };
+}
+
 
 function buildAdvancedOptions(data) {
     data.forEach(name => {
@@ -184,13 +206,13 @@ function spinner() {
  * Register a form element to submit with AJAX.
  * @param {jQuery} elem - Form element
  */
-function asyncForm(elem) {
+function asyncForm(elem, fct) {
     elem.ajaxForm({
         beforeSend: spinner,
 
         success: data => {
             spinner();
-            displayData(data);
+            fct(data);
         }
     });
 }

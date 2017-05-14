@@ -1,9 +1,18 @@
-<form id="insert-form" action="/insert" method="post">
-    <div class="uk-flex uk-flex-column uk-flex-middle">
-        <select class="uk-select" id="table-selector" name="table-selector">
+<div class=" uk-flex uk-flex-column uk-flex-center">
+    <form id="insert-form" action="/insert" method="post">
+        <div class="uk-margin uk-flex uk-flex-center" id="insert-selector">
+            <select class="uk-select uk-width-medium" id="table-selector" name="table-selector">
             {% for table in tables %}
             <option value="{{table}}">{{ table }}</option>
             {% endfor %}
         </select>
-    </div>
-</form>
+        </div>
+    </form>
+
+    <form id="get-insert-form" action="/insert" method="post">
+        <div class=" uk-flex uk-flex-column uk-flex-center uk-flex-wrap">
+            <div class="uk-margin" id="requested-table"></div>
+            <button class="uk-button uk-button-primary uk-width-small" id="insert-button" disabled>Insert</button>
+        </div>
+    </form>
+</div>
