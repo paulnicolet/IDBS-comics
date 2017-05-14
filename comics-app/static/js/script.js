@@ -23,6 +23,12 @@ function initTabs() {
         cacheTab();
         buildQueries();
     });
+
+    $('#delete-tab').on('click', () => {
+        // TODO shouldn't be able to delete from a relation ?
+        cacheTab();
+        buildDelete();
+    });
 }
 
 function cacheTab() {
@@ -34,9 +40,13 @@ function cacheTab() {
         }
     });
 
-    // Cache data
-    cache.forms[active] = $('#db-interface').html();
-    cache.tables[active] = $('#data-section').html();
+    // Cache form
+    cache.forms[active] = $('#db-interface').clone();
+
+    // Cache tables if present
+    if ($('#data-section').find('table').length) {
+        cache.tables[active] = $('#data-section').find('table').clone();
+    }
 
     if (active == 'queries-tab') {
         cache.selected_query = $('#query-selector').find(":selected").text();
@@ -44,51 +54,102 @@ function cacheTab() {
 }
 
 function buildSearch() {
+    // Restore form
     if (cache.forms['search-tab']) {
-        // Restore cached data
-        $('#data-section').html(cache.tables['search-tab'] || '');
-
-        // Restore cached form
         $('#db-interface').html(cache.forms['search-tab']);
-
-        // Register the form
-        asyncForm($('#search-form'));
-
-        // Replace options in the form after hiding it
-        $('#search-advanced-options').on('hidden', () => {
-            $('#search-form').append($('#search-advanced-options'));
-        });
+        restoreSearchFormEvents(displayData);
     } else {
-        // Not in cache
-        // Load the form
-        $('#db-interface').load('/search', () => {
-            // Register the form
-            asyncForm($('#search-form'));
+        loadSearchForm(displayData);
+    }
 
-            // Load the tables names and fill the advanced options
-            $.ajax('/get_table_names').done(data => {
-                buildAdvancedOptions(data);
-            });
-        });
+    // Restore data
+    $('#data-section').find('table').remove();
+    if (cache.tables['search-tab']) {
+        $('#data-section').append(cache.tables['search-tab']);
     }
 }
 
 function buildQueries() {
     if (cache.forms['queries-tab']) {
-        // Restore cached data
-        $('#data-section').html(cache.tables['queries-tab'] || '');
-
         // Restore cached form
         $('#db-interface').html(cache.forms['queries-tab']);
         var selector = ':contains("' + cache.selected_query + '")';
         $('#query-selector').children(selector).prop('selected', true);
-        asyncForm($('#queries-form'));
+        asyncForm($('#queries-form'), displayData);
     } else {
         // Not in cache
         $('#db-interface').load('/queries', () => {
-            asyncForm($('#queries-form'));
+            asyncForm($('#queries-form'), displayData);
         });
     }
+
+    // Restore data
+    $('#data-section').find('table').remove();
+    if (cache.tables['queries-tab']) {
+        $('#data-section').append(cache.tables['queries-tab']);
+    }
+}
+
+function buildDelete() {
+    // Restore form
+    if (cache.forms['delete-tab']) {
+        $('#db-interface').html(cache.forms['delete-tab']);
+        restoreSearchFormEvents(displayClickableData);
+    } else {
+        loadSearchForm(displayClickableData);
+    }
+
+    // Restore data
+    $('#data-section').find('table').remove();
+    if (cache.tables['delete-tab']) {
+        $('#data-section').append(cache.tables['delete-tab']);
+    }
+
+    // Register delete events
+    deleteOnClick();
+}
+
+function displayClickableData(data) {
+    displayData(data);
+    deleteOnClick();
+}
+
+function deleteOnClick() {
+    // Select all rows
+    $('tbody tr').on('click', event => {
+        // Get the row and table name
+        var row = $(event.currentTarget);
+        var table = row.closest('table').find('caption').html();
+
+        confirmMsg = 'Do you really want to delete tuple with ID ' + row.attr('id') + ' from the database ?';
+        UIkit.modal.confirm(confirmMsg).then(() => {
+            // Remove row 
+            row.remove();
+
+            // Request server to remove from DB
+            $.ajax('/delete', {
+                data: {
+                    'id': row.attr('id'),
+                    'table': table
+                },
+                method: 'POST',
+                success: () => { console.log('Success') }
+            })
+        }, () => { });
+    });
+}
+
+function restoreSearchFormEvents(callback) {
+    // Register the form
+    asyncForm($('#search-form'), callback);
+
+    // Replace options in the form after hiding it
+    $('#search-advanced-options').on('hidden', () => {
+        $('#search-form').append($('#search-advanced-options'));
+    });
+
+    // Register select all button
+    $('#checkall').on('change', selectAll);
 }
 
 function buildAdvancedOptions(data) {
@@ -98,18 +159,7 @@ function buildAdvancedOptions(data) {
     label.append(checkall);
     label.append(' SELECT ALL');
 
-    checkall.on('change', () => {
-        var boxes = $('#tables-checkboxes').find('.uk-checkbox');
-        boxes.each((idx, box) => {
-            if ($(box).attr('id') != 'checkall') {
-                if ($('#checkall').prop('checked')) {
-                    $(box).prop('checked', true);
-                } else {
-                    $(box).prop('checked', false);
-                }
-            }
-        });
-    });
+    checkall.on('change', selectAll);
 
     $('#tables-checkboxes').append(label);
 
@@ -132,9 +182,34 @@ function buildAdvancedOptions(data) {
     });
 }
 
+function loadSearchForm(callback) {
+    $('#db-interface').load('/search', () => {
+        // Register the form
+        asyncForm($('#search-form'), callback);
+
+        // Load the tables names and fill the advanced options
+        $.ajax('/get_table_names').done(data => {
+            buildAdvancedOptions(data);
+        });
+    });
+}
+
+function selectAll() {
+    var boxes = $('#tables-checkboxes').find('.uk-checkbox');
+    boxes.each((idx, box) => {
+        if ($(box).attr('id') != 'checkall') {
+            if ($('#checkall').prop('checked')) {
+                $(box).prop('checked', true);
+            } else {
+                $(box).prop('checked', false);
+            }
+        }
+    });
+}
+
 function displayData(tables) {
     // Clear existing tables
-    $('#data-section .uk-table').remove();
+    $('#data-section').find('table').remove();
 
     // Append tables only if there are tuples
     tables.forEach(table => { appendTable(table[0], table[1], table[2]) })
@@ -164,13 +239,18 @@ function appendTable(name, schema, data) {
         // For each tuple, build the row
         var row = $("<tr></tr>");
 
-        tuple.forEach(name => {
+        tuple.forEach((value, idx) => {
             // For each element, build the cell
             var cell = $('<td></td>');
-            cell.append(name);
+            cell.append(value);
 
             // Insert in the current row
             row.append(cell);
+
+            // Set tuple ID as row ID
+            if (idx == 0) {
+                row.attr('id', value);
+            }
         });
 
         // Insert the row in the body
@@ -184,10 +264,6 @@ function appendTable(name, schema, data) {
     $('#data-section').append(table);
 }
 
-/**
- * Add or remove the spinner element above data table depending 
- * if it is present or not.
- */
 function spinner() {
     if ($('#spinner').length) {
         $('#spinner').remove();
@@ -196,17 +272,13 @@ function spinner() {
     }
 }
 
-/**
- * Register a form element to submit with AJAX.
- * @param {jQuery} elem - Form element
- */
-function asyncForm(elem) {
+function asyncForm(elem, callback) {
     elem.ajaxForm({
         beforeSend: spinner,
 
         success: data => {
             spinner();
-            displayData(data);
+            callback(data);
         }
     });
 }

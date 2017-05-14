@@ -57,6 +57,22 @@ def queries():
     return jsonify([('', schema, data)])
 
 
+@app.route('/delete', methods=['POST'])
+@ajax
+def delete():
+    tuple_id = request.form['id']
+    table_name = request.form['table']
+
+    if table_name not in utils.get_table_names(get_db(app)):
+        return abort(401)
+
+    query = 'DELETE FROM {} WHERE id=:tuple'.format(table_name)
+    # Do not delete during development :)
+    #result = execute_query(get_db(app), query, tuple=tuple_id)
+
+    return 'Deleted', 200
+
+
 @app.route('/get_table_names', methods=['GET'])
 @ajax
 def get_table_names():

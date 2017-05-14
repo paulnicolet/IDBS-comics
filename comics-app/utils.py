@@ -7,11 +7,17 @@ import re
 def execute_query(con, query, **kwargs):
     """ Execute a query and return corresponding data """
     # Execute query
+    print(query)
     cur = con.cursor()
     cur.execute(query, kwargs)
 
     # Return data with description
-    return (extract_schema(cur.description), cur.fetchall())
+    try:
+        data = cur.fetchall()
+    except:
+        data = []
+
+    return (extract_schema(cur.description), data)
 
 
 def generic_search(con, keywords, tables):
@@ -43,6 +49,9 @@ def generic_search(con, keywords, tables):
 
 def extract_schema(description):
     """ Extract column names from cursor description """
+    if not description:
+        return []
+
     names = []
     for col in description:
         names.append(col[0])
