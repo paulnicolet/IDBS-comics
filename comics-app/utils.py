@@ -2,6 +2,7 @@ from flask import abort, request, g
 from functools import wraps
 import cx_Oracle
 import re
+import collections
 
 
 def execute_query(con, query, **kwargs):
@@ -111,3 +112,52 @@ def get_column_names(con, table):
     """ Return table column names """
     query = 'SELECT * FROM {} WHERE 1=0'.format(table)
     return execute_query(con, query)[0]
+
+
+def create_dict_for_insert(con):
+    """This function is used to create a dictionnary containing all the tables
+    and there column that must appear in the UI as well as an indicator to which
+    insert category it belong (1, 2 or 3)"""
+    # create dict of dictionnary
+    insert_dict = dict()
+    tables = get_table_names(con)
+    for table in tables:
+        attributs = get_column_names(con, table)
+        # check if there is an ID attribut meaning
+        # that this table is not a relation
+        if 'ID' not in attributs:
+            continue
+        insert_dict[table] = dict()
+        for attribut in attributs:
+            # skip the id attribut for it is not to the userv to set it
+            if attribut == 'ID':
+                continue
+                # check if attribut name has ID in it meaning it is referencing
+                # another table
+            if 'ID' not in attribut:
+                # clean and insert column name with insert indicator 1
+                insert_dict[table][attribut] = {'case': 1}
+            else:
+                # clean and insert column name with insert indicator 2
+                foreign_table = attribut.replace('_ID', '')
+                if foreign_table == "REPRINT_NOTE":
+                    foreign_table = "NOTE"
+                insert_dict[table][attribut] = {
+                    'case': 2,
+                    'foreign_table': foreign_table
+                }
+        # go through tables and find elements where the names is
+        # with type 3 inserts
+        for table2 in tables:
+            if table2 == 'FIRST_LAST_ISSUE':
+                continue
+            attributs2 = get_column_names(con, table2)
+            if table + '_ID' == attributs2[0]:
+                foreign_table = attributs2[1].replace('_ID', '')
+                col_name = table2.split('_')[-1]
+                insert_dict[table][col_name] = {
+                    'case': 3,
+                    'foreign_table': foreign_table,
+                    'foreign_relation': table2
+                }
+    return insert_dict

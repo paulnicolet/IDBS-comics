@@ -3,10 +3,10 @@ from utils import get_db, get_queries, ajax, execute_query, generic_search
 import utils
 import os
 import atexit
+import collections
 
 app = Flask(__name__)
 context = {}
-
 # Set app configuration
 app.config.update({'DB_USER': os.environ['IDBS_USER'],
                    'DB_PWD': os.environ['IDBS_PWD'],
@@ -20,6 +20,8 @@ app.config.update({'DB_USER': os.environ['IDBS_USER'],
 @app.route('/')
 def home():
     con = get_db(app)
+    context['insert_dict'] = utils.create_dict_for_insert(con)
+    # print(insert_dict)
     return render_template('index.html')
 
 
@@ -55,6 +57,16 @@ def queries():
     (schema, data) = execute_query(get_db(app), query)
 
     return jsonify([('', schema, data)])
+
+
+@app.route('/insert', methods=['GET', 'POST'])
+@ajax
+def insert():
+    keys = context['insert_dict'].keys()
+    if request.method == 'GET':
+        return render_template('insert-form.html', tables=keys)
+
+    return jsonify(context['insert_dict'][request.form['table-selector']])
 
 
 @app.route('/delete', methods=['POST'])

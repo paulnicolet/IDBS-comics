@@ -29,6 +29,12 @@ function initTabs() {
         cacheTab();
         buildDelete();
     });
+
+    $('#insert-tab').on('click', () => {
+        cacheTab();
+        buildInsert();
+    });
+
 }
 
 function cacheTab() {
@@ -151,6 +157,28 @@ function restoreSearchFormEvents(callback) {
     // Register select all button
     $('#checkall').on('change', selectAll);
 }
+function buildInsert() {
+    $('#db-interface').load('/insert', () => {
+        asyncForm($('#insert-form'), createInsertCells);
+        $('#insert-form').on('change', () => {
+            $('#insert-button').prop("disabled", false);
+            $('#insert-form').submit();
+        })
+    });
+}
+
+function createInsertCells(data) {
+    $('#requested-table').empty()
+    for (var key in data) {
+        searchCell = $('<input class="uk-input uk-form-width-medium" type="text">')
+        searchCell.attr('name', key)
+        placeHolder = key.replace('_ID', '')
+        placeHolder = placeHolder.replace(/_/g, ' ')
+        searchCell.attr('placeholder', placeHolder)
+        $('#requested-table').append(searchCell)
+    };
+}
+
 
 function buildAdvancedOptions(data) {
     // Build select all option
