@@ -1,5 +1,5 @@
 from flask import Flask, g, render_template, request, jsonify, abort
-from utils import get_db, get_queries, ajax, execute_query, generic_search
+from utils import get_db, get_queries, ajax, execute_query, generic_search, get_column_names
 import utils
 import os
 import atexit
@@ -66,7 +66,30 @@ def insert():
     if request.method == 'GET':
         return render_template('insert-form.html', tables=keys)
 
-    return jsonify(context['insert_dict'][request.form['table-selector']])
+    table_properties = context['insert_dict'][request.form['table-selector']]
+
+    return jsonify(table_properties)
+
+
+@app.route('/autocomplete', methods=['POST'])
+@ajax
+def autocomplete():
+    print(request.form)
+    value = request.form['value']
+    table = request.form['table']
+
+    foreign_col_names = get_column_names(get_db(app), table)
+
+    if len(foreign_col_names) > 2:
+        autocomplete_col = 'NAME' if 'NAME' in foreign_col_names else 'TITLE'
+    else:
+        autocomplete_col = foreign_col_names[1]
+
+    query = 'SELECT {} FROM {} WHERE {} LIKE \'%\'||:value||\'%\''.format(
+        autocomplete_col, table, autocomplete_col)
+    data = execute_query(get_db(app), query, value=value)[1]
+
+    return jsonify(data)
 
 
 @app.route('/delete', methods=['POST'])

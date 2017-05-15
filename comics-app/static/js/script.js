@@ -199,12 +199,81 @@ function selectAll() {
 function createInsertCells(data) {
     $('#requested-table').empty()
     for (var key in data) {
-        searchCell = $('<input class="uk-input uk-form-width-medium" type="text">')
-        searchCell.attr('name', key)
+        // Generate placeholder
         placeHolder = key.replace('_ID', '')
         placeHolder = placeHolder.replace(/_/g, ' ')
+
+        // Create text field
+        searchCell = $('<input class="uk-input uk-form-width-medium" type="text">')
+        searchCell.attr('name', key)
         searchCell.attr('placeholder', placeHolder)
-        $('#requested-table').append(searchCell)
+        $('#requested-table').append(searchCell);
+
+        // It's a foreign key
+        if (data[key]['case'] == 2 || data[key]['case'] == 3) {
+            // Add the linked table
+            searchCell.attr('foreign-table', data[key]['foreign_table'])
+
+            searchCell.on('click', event => {
+                // Display prompt on click
+                UIkit.modal.prompt('Search a tuple in ' + $(event.currentTarget).attr('foreign-table') + ' by name or title', '')
+                    .then(data => {
+                        // If data is selected, set the field value
+                        if (data) {
+                            $(event.currentTarget).val(data);
+                        }
+                    });
+
+                // Get elements
+                var prompt = $('.uk-modal');
+                var modal = $('.uk-modal-dialog');
+                var input = modal.find('.uk-input');
+                var body = $('<div class="uk-modal-body"></div>');
+                var list = $('<ul class="uk-list uk-list-divider"></ul>');
+
+                // Create structure
+                var chars = 4;
+                var info = 'Type at least ' + chars + ' characters to get autocomplete \
+                            and click on a value to fill input. \
+                            </br> Note: Not existing values will be ignored when adding the tuple \
+                            </br>';
+                body.html(info);
+                modal.attr('foreign-table', $(event.currentTarget).attr('foreign-table'));
+                modal.append(body);
+                body.append(list);
+
+                // Load data when typing
+                input.on('input', event => {
+                    var target = $(event.currentTarget);
+
+                    // If enough characters, start autocomplete
+                    if (target.val().length >= chars) {
+                        // Get matching tuples from server
+                        $.ajax('/autocomplete', {
+                            method: 'post',
+
+                            data: {
+                                value: target.val(),
+                                table: modal.attr('foreign-table')
+                            },
+
+                            success: data => {
+                                // Display tuples and make them clickable
+                                list.empty();
+                                data.forEach((elem, idx) => {
+                                    var li = $('<li></li>').html(elem);
+                                    list.append(li);
+                                    li.on('click', () => {
+                                        input.val(elem);
+                                    })
+                                })
+                            }
+                        })
+                    }
+                });
+            });
+        }
+
     };
 }
 
