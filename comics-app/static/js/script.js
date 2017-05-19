@@ -98,12 +98,17 @@ function buildQueries() {
 }
 
 function buildInsert() {
+    // Remove data 
+    $('#data-section').find('table').remove();
+
+    // Load form
     $('#db-interface').load('/insert', () => {
         asyncForm($('#insert-form'), createInsertCells);
         $('#insert-form').on('change', () => {
-            $('#insert-button').prop("disabled", false);
             $('#insert-form').submit();
-        })
+        });
+
+        $('#insert-form').submit();
     });
 }
 
@@ -203,6 +208,7 @@ function selectAll() {
 /* --------------------------------- Insert --------------------------------- */
 function createInsertCells(data) {
     $('#requested-table').empty()
+    $('#insert-button').prop("disabled", false);
     for (var key in data) {
         // Generate placeholder
         placeHolder = key.replace('_ID', '')
@@ -214,10 +220,11 @@ function createInsertCells(data) {
         searchCell.attr('placeholder', placeHolder)
         $('#requested-table').append(searchCell);
 
-        // It's a foreign key
+        // If it's a foreign key
         if (data[key]['case'] == 2 || data[key]['case'] == 3) {
             // Add the linked table
             searchCell.attr('foreign-table', data[key]['foreign_table'])
+            searchCell.prop('insert-allowed', data[key]['insert_foreign_table'])
 
             searchCell.on('click', event => {
                 // Display prompt on click
@@ -235,51 +242,59 @@ function createInsertCells(data) {
                 var input = modal.find('.uk-input');
                 var body = $('<div class="uk-modal-body"></div>');
                 var list = $('<ul class="uk-list uk-list-divider"></ul>');
+                var foreignTable = $(event.currentTarget).attr('foreign-table');
 
                 // Create structure
                 var chars = 4;
                 var info = 'Type at least ' + chars + ' characters to get autocomplete \
                             and click on a value to fill input. \
-                            </br> Note: Not existing values will be ignored when adding the tuple \
                             </br>';
+
+                if (!$(event.currentTarget).prop('insert-allowed')) {
+                    info += 'Note: Non existing values will be ignored during insertion.</br>'
+                }
+
                 body.html(info);
-                modal.attr('foreign-table', $(event.currentTarget).attr('foreign-table'));
                 modal.append(body);
                 body.append(list);
 
-                // Load data when typing
-                input.on('input', event => {
-                    var target = $(event.currentTarget);
-
-                    // If enough characters, start autocomplete
-                    if (target.val().length >= chars) {
-                        // Get matching tuples from server
-                        $.ajax('/autocomplete', {
-                            method: 'post',
-
-                            data: {
-                                value: target.val(),
-                                table: modal.attr('foreign-table')
-                            },
-
-                            success: data => {
-                                // Display tuples and make them clickable
-                                list.empty();
-                                data.forEach((elem, idx) => {
-                                    var li = $('<li></li>').html(elem);
-                                    list.append(li);
-                                    li.on('click', () => {
-                                        input.val(elem);
-                                    })
-                                })
-                            }
-                        })
-                    }
-                });
+                // Perform autocomplete
+                input.on('input', (event) => autocomplete(event, { chars: chars, table: foreignTable, input: input, list: list }));
             });
         }
 
     };
+}
+
+function autocomplete(event, params) {
+    var target = $(event.currentTarget);
+    var input = params.input;
+    var list = params.list;
+
+    // If enough characters, start autocomplete
+    if (target.val().length >= params.chars) {
+        // Get matching tuples from server
+        $.ajax('/autocomplete', {
+            method: 'post',
+
+            data: {
+                value: target.val(),
+                table: params.table
+            },
+
+            success: data => {
+                // Display tuples and make them clickable
+                list.empty();
+                data.forEach((elem, idx) => {
+                    var li = $('<li></li>').html(elem);
+                    list.append(li);
+                    li.on('click', () => {
+                        input.val(elem);
+                    })
+                })
+            }
+        })
+    }
 }
 
 /* --------------------------------- Delete --------------------------------- */
