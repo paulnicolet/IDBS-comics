@@ -66,7 +66,7 @@ function buildSearch() {
         $('#db-interface').html(cache.forms['search-tab']);
         restoreSearchFormEvents(displayData);
     } else {
-        loadSearchForm(displayData);
+        loadSearchForm(displayData, false);
     }
 
     // Restore data
@@ -113,7 +113,8 @@ function buildDelete() {
         $('#db-interface').html(cache.forms['delete-tab']);
         restoreSearchFormEvents(displayClickableData);
     } else {
-        loadSearchForm(displayClickableData);
+        // Load form in delete mode
+        loadSearchForm(displayClickableData, true);
     }
 
     // Restore data
@@ -127,13 +128,17 @@ function buildDelete() {
 }
 
 /* --------------------------------- Search --------------------------------- */
-function loadSearchForm(callback) {
+function loadSearchForm(callback, deleteFlag) {
     $('#db-interface').load('/search', () => {
         // Register the form
         asyncForm($('#search-form'), callback);
 
         // Load the tables names and fill the advanced options
-        $.ajax('/get_table_names').done(data => {
+        var namesUrl = '/get_table_names'
+        if (deleteFlag) {
+            namesUrl = '/get_delete_table_names'
+        }
+        $.ajax(namesUrl).done(data => {
             buildAdvancedOptions(data);
         });
     });

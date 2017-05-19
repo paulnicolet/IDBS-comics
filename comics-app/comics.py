@@ -98,7 +98,7 @@ def delete():
     tuple_id = request.form['id']
     table_name = request.form['table']
 
-    if table_name not in utils.get_table_names(get_db(app)):
+    if table_name not in utils.get_table_names(get_db(app), deletable=True):
         return abort(401)
 
     query = 'DELETE FROM {} WHERE id=:tuple'.format(table_name)
@@ -112,6 +112,12 @@ def delete():
 @ajax
 def get_table_names():
     return jsonify(utils.get_table_names(get_db(app)))
+
+
+@app.route('/get_delete_table_names', methods=['GET'])
+@ajax
+def get_delete_table_names():
+    return jsonify(utils.get_table_names(get_db(app), deletable=True))
 
 
 @app.teardown_appcontext

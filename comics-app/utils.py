@@ -101,11 +101,17 @@ def get_queries(app, context):
     return context['queries']
 
 
-def get_table_names(con):
+def get_table_names(con, deletable=False):
     """ Return database tables names """
     query = 'SELECT table_name FROM user_tables'
     data = execute_query(con, query)[1]
-    return list(map(lambda x: x[0], data))
+    table_names = list(map(lambda x: x[0], data))
+
+    if deletable:
+        table_names = [
+            x for x in table_names if 'ID' in get_column_names(con, x)]
+
+    return table_names
 
 
 def get_column_names(con, table):
