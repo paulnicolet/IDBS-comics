@@ -21,7 +21,7 @@ app.config.update({'DB_USER': os.environ['IDBS_USER'],
 def home():
     con = get_db(app)
     context['insert_dict'] = utils.create_dict_for_insert(con)
-    # print(insert_dict)
+    print(context['insert_dict'])
     return render_template('index.html')
 
 
@@ -65,9 +65,14 @@ def insert():
     keys = context['insert_dict'].keys()
     if request.method == 'GET':
         return render_template('insert-form.html', tables=keys)
-
+    data = {}
     return jsonify(context['insert_dict'][request.form['table-selector']])
 
+@app.route('/insert-data', methods=['POST'])
+@ajax
+def insert_data():
+    utils.insertion(context['insert_dict'],request.form,get_db(app))
+    return jsonify(request.form)
 
 @app.route('/delete', methods=['POST'])
 @ajax

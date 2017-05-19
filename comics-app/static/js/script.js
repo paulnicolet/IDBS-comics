@@ -99,9 +99,12 @@ function buildQueries() {
 
 function buildInsert() {
     $('#db-interface').load('/insert', () => {
+        //create all the cells based on the selected table
         asyncForm($('#insert-form'), createInsertCells);
+        $('#insert-data-form').ajaxForm();
         $('#insert-form').on('change', () => {
             $('#insert-button').prop("disabled", false);
+            $('#table-name').val($('#table-selector').find(":selected").text())
             $('#insert-form').submit();
         })
     });
@@ -198,14 +201,24 @@ function selectAll() {
 /* --------------------------------- Insert --------------------------------- */
 function createInsertCells(data) {
     $('#requested-table').empty()
+
     for (var key in data) {
+        var nullable = data[key]['nullable']
+        //console.log(nullable)
         searchCell = $('<input class="uk-input uk-form-width-medium" type="text">')
+        if (nullable == false){
+            searchCell.addClass("uk-form-danger")
+        }
         searchCell.attr('name', key)
         placeHolder = key.replace('_ID', '')
         placeHolder = placeHolder.replace(/_/g, ' ')
         searchCell.attr('placeholder', placeHolder)
         $('#requested-table').append(searchCell)
     };
+}
+
+function insertData(data){
+    console.log('success')
 }
 
 /* --------------------------------- Delete --------------------------------- */
@@ -218,7 +231,7 @@ function deleteOnClick() {
 
         confirmMsg = 'Do you really want to delete tuple with ID ' + row.attr('id') + ' from the database ?';
         UIkit.modal.confirm(confirmMsg).then(() => {
-            // Remove row 
+            // Remove row
             row.remove();
 
             // Request server to remove from DB
