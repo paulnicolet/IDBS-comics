@@ -9,9 +9,11 @@
         </div>
     </form>
 
-    <form id="get-insert-form" action="/insert" method="post">
-        <div class=" uk-flex uk-flex-column uk-flex-middle uk-flex-wrap">
+
+    <form id="insert-data-form" action="/insert-data" method="post">
+        <div class=" uk-flex  uk-flex-middle uk-flex-column">
             <div class="uk-margin" id="requested-table"></div>
+            <input type="hidden" id="table-name" name="table-name"></input>
             <button class="uk-button uk-button-primary uk-width-small" id="insert-button" disabled>Insert</button>
         </div>
     </form>

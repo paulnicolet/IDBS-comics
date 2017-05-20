@@ -21,7 +21,7 @@ app.config.update({'DB_USER': os.environ['IDBS_USER'],
 def home():
     con = get_db(app)
     context['insert_dict'] = utils.create_dict_for_insert(con)
-    # print(insert_dict)
+    # print(context['insert_dict'])
     return render_template('index.html')
 
 
@@ -67,7 +67,6 @@ def insert():
         return render_template('insert-form.html', tables=keys)
 
     table_properties = context['insert_dict'][request.form['table-selector']]
-
     return jsonify(table_properties)
 
 
@@ -90,6 +89,13 @@ def autocomplete():
     data = execute_query(get_db(app), query, value=value)[1]
 
     return jsonify(data)
+
+
+@app.route('/insert-data', methods=['POST'])
+@ajax
+def insert_data():
+    utils.insertion(context['insert_dict'], request.form, get_db(app))
+    return jsonify(request.form)
 
 
 @app.route('/delete', methods=['POST'])
