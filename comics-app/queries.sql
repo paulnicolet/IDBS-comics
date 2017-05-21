@@ -1,21 +1,14 @@
 --Print the brand group names with the highest number of Belgian indicia publishers:
-SELECT name from (SELECT B.id, B.name
-FROM Brand_Group B, Publisher P, Indicia_Publisher I, Country C
-WHERE B.publisher_id = P.id AND
-      P.id = I.publisher_id AND
-      I.country_id = C.id AND
-      C.name = 'Belgium'
-GROUP BY B.id, B.name
-HAVING COUNT(*) = (SELECT MAX(col)
-                   FROM (SELECT COUNT(*) as col
-                              FROM Brand_Group B, Publisher P, Indicia_Publisher I, Country C
-                              WHERE B.publisher_id = P.id AND
-                              P.id = I.publisher_id AND
-                              I.country_id = C.id AND
-                              C.name = 'Belgium'
-                              GROUP BY B.id)
-                    ))
-;
+WITH GROUPED AS (SELECT B.id, B.name, COUNT(*) as IPCount
+                  FROM Brand_Group B, Publisher P, Indicia_Publisher I, Country C
+                  WHERE B.publisher_id = P.id AND
+                        P.id = I.publisher_id AND
+                        I.country_id = C.id AND
+                        C.name = 'Belgium'
+                  GROUP BY B.id, B.name)
+SELECT G.name
+FROM GROUPED G
+WHERE G.IPCount = (SELECT MAX(IPCount) FROM GROUPED);
 
 --Print the ids and names of publishers of Danish book series:
 SELECT P.id, P.name
@@ -27,7 +20,7 @@ WHERE S.publisher_id = P.id AND
 
 --Print the names of all Swiss series that have been published in magazines:
 SELECT S.name
-FROM Serie S, Country C, Serie_Publication_Type T
+FROM Serie S, Country C, Publication_Type T
 WHERE S.country_id = C.id AND
 	C.name = 'Switzerland' AND
 	S.publication_type_id = T.id AND
@@ -52,17 +45,16 @@ GROUP BY IP.name
 ;
 
 --Print the titles of the 10 most reprinted stories:
-SELECT title
-FROM (SELECT S.id, S.title AS title
-      FROM Story_Reprint SR, Story S
-      WHERE S.id = SR.origin_id
-      GROUP BY S.id,S.title
-      ORDER BY COUNT(*) DESC)
+SELECT S.title
+FROM Story_Reprint SR, Story S
+WHERE S.id = SR.origin_id
+GROUP BY S.id, S.title
+ORDER BY COUNT(*) DESC
 FETCH FIRST 10 ROWS ONLY
 ;
 
 --Print the artists that have scripted, drawn, and colored at least one of the stories they were involved in:
-SELECT A.name
+SELECT DISTINCT A.name
 FROM Artist A
 WHERE A.id IN (SELECT S.artist_id
                   FROM Script S, Pencil P, Color C
