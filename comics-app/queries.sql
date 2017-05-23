@@ -85,3 +85,50 @@ WHERE NOT EXISTS (SELECT SR.origin_id
                   WHERE SF.story_id = S.id AND
                   SF.character_id = C.id AND
 		      C.name = 'Batman')
+;
+
+-- Print the series names that have the highest number of issues which contain a story whose type (e.g., cartoon) is not the one occurring most frequently in the database (e.g, illustration). AT LEAST 1 STORY NOT OF THIS TYPE ?
+SELECT SE.name
+FROM Serie SE
+WHERE SE.id = 
+	(SELECT I.serie_id
+		FROM Issue I
+		WHERE EXISTS 
+			(SELECT ST.id
+				FROM Story ST
+				WHERE I.id = ST.issue_id AND
+						ST.story_type_id != 
+							(SELECT S.story_type_id
+								FROM Story S
+								GROUP BY S.story_type_id
+								ORDER BY COUNT(*) DESC
+								FETCH FIRST ROW ONLY
+							)
+			)
+		GROUP BY I.serie_id
+		ORDER BY COUNT(*) DESC
+		FETCH FIRST ROW ONLY
+	)
+;
+
+-- Print the names of publishers who have series with all series types
+SELECT P.name
+FROM Publisher P, Serie S
+WHERE S.publisher_id = P.id
+GROUP BY P.id, P.name
+HAVING COUNT(DISTINCT S.publication_type_id) = (SELECT COUNT(*) FROM Publication_Type)
+;
+
+-- Print the 10 most-reprinted characters from Alan Moore's stories
+SELECT C.name, COUNT(*)
+FROM Story_Reprint SR, Story S, Story_Character SC, Script SCR, Artist A, Character C
+WHERE S.id = SR.origin_id AND 
+		S.id = SC.story_id AND
+            SC.character_id = C.id AND
+		S.id = SCR.story_id AND
+		SCR.artist_id = A.id AND
+		A.name = 'Alan Moore'
+GROUP BY SR.origin_id, C.name
+ORDER BY COUNT(SR.target_id) DESC
+FETCH FIRST 10 ROWS ONLY
+;
