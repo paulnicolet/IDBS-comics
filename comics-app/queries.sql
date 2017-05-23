@@ -1,21 +1,23 @@
 --Print the brand group names with the highest number of Belgian indicia publishers:
-WITH GROUPED AS (SELECT B.id, B.name, COUNT(*) as IPCount
-                  FROM Brand_Group B, Publisher P, Indicia_Publisher I, Country C
-                  WHERE B.publisher_id = P.id AND
-                        P.id = I.publisher_id AND
-                        I.country_id = C.id AND
-                        C.name = 'Belgium'
-                  GROUP BY B.id, B.name)
-SELECT G.name
-FROM GROUPED G
-WHERE G.IPCount = (SELECT MAX(IPCount) FROM GROUPED);
+SELECT B.name
+FROM Brand_Group B, Publisher P, Indicia_Publisher I, Country C
+WHERE B.publisher_id = P.id AND
+      P.id = I.publisher_id AND
+      I.country_id = C.id AND
+      C.name = 'Belgium'
+GROUP BY B.id, B.name
+ORDER BY COUNT(*) DESC
+FETCH FIRST ROW ONLY
+;
 
 --Print the ids and names of publishers of Danish book series:
-SELECT P.id, P.name
-FROM Serie S, Publisher P, Country C
+SELECT DISTINCT P.id, P.name
+FROM Serie S, Publisher P, Publication_Type PT, Country C
 WHERE S.publisher_id = P.id AND
       S.country_id = C.id AND
-	C.name = 'Denmark'
+      C.name = 'Denmark' AND
+      S.publication_type_id = PT.id AND
+      PT.name = 'book'
 ;
 
 --Print the names of all Swiss series that have been published in magazines:
