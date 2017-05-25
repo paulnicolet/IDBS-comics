@@ -87,7 +87,7 @@ WHERE NOT EXISTS (SELECT SR.origin_id
 		      C.name = 'Batman')
 ;
 
--- Print the series names that have the highest number of issues which contain a story whose type (e.g., cartoon) is not the one occurring most frequently in the database (e.g, illustration). AT LEAST 1 STORY NOT OF THIS TYPE ?
+--Print the series names that have the highest number of issues which contain a story whose type (e.g., cartoon) is not the one occurring most frequently in the database (e.g, illustration). AT LEAST 1 STORY NOT OF THIS TYPE ?
 SELECT SE.name
 FROM Serie SE
 WHERE SE.id = 
@@ -111,7 +111,7 @@ WHERE SE.id =
 	)
 ;
 
--- Print the names of publishers who have series with all series types
+--Print the names of publishers who have series with all series types
 SELECT P.name
 FROM Publisher P, Serie S
 WHERE S.publisher_id = P.id
@@ -119,16 +119,32 @@ GROUP BY P.id, P.name
 HAVING COUNT(DISTINCT S.publication_type_id) = (SELECT COUNT(*) FROM Publication_Type)
 ;
 
--- Print the 10 most-reprinted characters from Alan Moore's stories
+--Print the 10 most-reprinted characters from Alan Moore's stories
 SELECT C.name, COUNT(*)
 FROM Story_Reprint SR, Story S, Story_Character SC, Script SCR, Artist A, Character C
 WHERE S.id = SR.origin_id AND 
 		S.id = SC.story_id AND
-            SC.character_id = C.id AND
+        SC.character_id = C.id AND
 		S.id = SCR.story_id AND
 		SCR.artist_id = A.id AND
 		A.name = 'Alan Moore'
 GROUP BY SR.origin_id, C.name
 ORDER BY COUNT(SR.target_id) DESC
 FETCH FIRST 10 ROWS ONLY
+;
+
+--Print the writers of nature-related stories that have also done the pencilwork in all their nature-related stories.
+SELECT SCR.artist_id
+FROM Story S, Script SCR, Pencil P
+WHERE S.id = SCR.story_id AND
+		S.id = P.story_id AND
+		SCR.artist_id = P.artist_id AND
+		S.genre LIKE '%nature%'
+GROUP BY SCR.artist_id
+HAVING COUNT(S.id) = (SELECT COUNT(*)
+						FROM Story, Script 
+						WHERE Story.id = Script.story_id AND
+                  				Script.artist_id = SCR.artist_id AND
+								Story.genre LIKE '%nature%'
+						)
 ;
