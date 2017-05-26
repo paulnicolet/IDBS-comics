@@ -180,11 +180,12 @@ WHERE S.issue_id = I.id AND
 		I.serie_id = SE.id AND
 		L.id = SE.language_id AND
 		S.id NOT IN (SELECT SR.target_id FROM Story_Reprint SR) AND
-		SE.publication_type_id = PT.id AND 
+		SE.publication_type_id = PT.id AND
 		PT.name = 'magazine'
 GROUP BY L.name, SE.language_id
 HAVING COUNT(*) >= 10000
 ORDER BY COUNT(*) DESC
+;
 
 --Print all story types that have not been published as a part of Italian magazine series.:
 SELECT ST.name
@@ -200,6 +201,7 @@ AND SER.ID = I.SERIE_ID
 AND S.ISSUE_ID = I.ID
 AND S.STORY_TYPE_ID = ST.ID
 ;
+
 --Print the writers of cartoon stories who have worked as writers for more than one indicia publisher.:
 SELECT A.name
 FROM ARTIST A, SCRIPT SCR,INDICIA_PUBLISHER IP,ISSUE I,STORY S,STORY_TYPE ST
