@@ -87,7 +87,11 @@ WHERE NOT EXISTS (SELECT SR.origin_id
 		      C.name = 'Batman')
 ;
 
+<<<<<<< HEAD
 --Print the series names that have the highest number of issues which contain a story whose type (e.g., cartoon) is not the one occurring most frequently in the database (e.g, illustration):
+=======
+--Print the series names that have the highest number of issues which contain a story whose type (e.g., cartoon) is not the one occurring most frequently in the database (e.g, illustration). AT LEAST 1 STORY NOT OF THIS TYPE ?:
+>>>>>>> c1230d489084ffed694bdf4c1674f018bd2780bd
 SELECT SE.name
 FROM Serie SE
 WHERE SE.id =
@@ -133,7 +137,11 @@ ORDER BY COUNT(SR.target_id) DESC
 FETCH FIRST 10 ROWS ONLY
 ;
 
+<<<<<<< HEAD
 --Print the writers of nature-related stories that have also done the pencilwork in all their nature-related stories.:
+=======
+--Print the writers of nature-related stories that have also done the pencilwork in all their nature-related stories:
+>>>>>>> c1230d489084ffed694bdf4c1674f018bd2780bd
 SELECT SCR.artist_id
 FROM Story S, Script SCR, Pencil P
 WHERE S.id = SCR.story_id AND
@@ -149,6 +157,7 @@ HAVING COUNT(S.id) = (SELECT COUNT(*)
 						)
 ;
 
+<<<<<<< HEAD
 --Print all story types that have not been published as a part of Italian magazine series.:
 SELECT ST.name
 FROM STORY_TYPE ST
@@ -277,3 +286,27 @@ FROM(
 )
 WHERE rn = 1
 ;
+=======
+--For each of the top-10 publishers in terms of published series, print the 3 most popular languages of their series:
+SELECT P.name AS publisher_name, L.name AS language_name, K.language_count
+FROM Publisher P, Language L, 
+	(SELECT T.publisher_id, T.language_id, T.language_count, ROW_NUMBER()
+	OVER (PARTITION BY T.publisher_id ORDER BY T.language_count DESC) AS rn
+	FROM 
+		(SELECT S.publisher_id, S.language_id, COUNT(*) AS language_count
+		FROM Serie S
+		WHERE S.publisher_id IN 
+			(SELECT S2.publisher_id
+			FROM Serie S2
+			GROUP BY S2.publisher_id
+			ORDER BY COUNT(*) DESC
+			FETCH FIRST 10 ROWS ONLY)
+		GROUP BY S.publisher_id, S.language_id
+		ORDER BY COUNT(*) DESC) T
+	) K
+WHERE P.id = K.publisher_id AND
+      L.id = K.language_id AND
+      K.rn <= 3
+ORDER BY publisher_name, language_count DESC
+;
+>>>>>>> c1230d489084ffed694bdf4c1674f018bd2780bd
