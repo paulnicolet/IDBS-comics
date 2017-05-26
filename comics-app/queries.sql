@@ -87,7 +87,7 @@ WHERE NOT EXISTS (SELECT SR.origin_id
 		      C.name = 'Batman')
 ;
 
---Print the series names that have the highest number of issues which contain a story whose type (e.g., cartoon) is not the one occurring most frequently in the database (e.g, illustration). AT LEAST 1 STORY NOT OF THIS TYPE ?
+--Print the series names that have the highest number of issues which contain a story whose type (e.g., cartoon) is not the one occurring most frequently in the database (e.g, illustration). AT LEAST 1 STORY NOT OF THIS TYPE ?:
 SELECT SE.name
 FROM Serie SE
 WHERE SE.id = 
@@ -111,7 +111,7 @@ WHERE SE.id =
 	)
 ;
 
---Print the names of publishers who have series with all series types
+--Print the names of publishers who have series with all series types:
 SELECT P.name
 FROM Publisher P, Serie S
 WHERE S.publisher_id = P.id
@@ -119,7 +119,7 @@ GROUP BY P.id, P.name
 HAVING COUNT(DISTINCT S.publication_type_id) = (SELECT COUNT(*) FROM Publication_Type)
 ;
 
---Print the 10 most-reprinted characters from Alan Moore's stories
+--Print the 10 most-reprinted characters from Alan Moore's stories:
 SELECT C.name, COUNT(*)
 FROM Story_Reprint SR, Story S, Story_Character SC, Script SCR, Artist A, Character C
 WHERE S.id = SR.origin_id AND 
@@ -133,7 +133,7 @@ ORDER BY COUNT(SR.target_id) DESC
 FETCH FIRST 10 ROWS ONLY
 ;
 
---Print the writers of nature-related stories that have also done the pencilwork in all their nature-related stories.
+--Print the writers of nature-related stories that have also done the pencilwork in all their nature-related stories:
 SELECT SCR.artist_id
 FROM Story S, Script SCR, Pencil P
 WHERE S.id = SCR.story_id AND
@@ -147,4 +147,27 @@ HAVING COUNT(S.id) = (SELECT COUNT(*)
                   				Script.artist_id = SCR.artist_id AND
 								Story.genre LIKE '%nature%'
 						)
+;
+
+--For each of the top-10 publishers in terms of published series, print the 3 most popular languages of their series:
+SELECT P.name AS publisher_name, L.name AS language_name, K.language_count
+FROM Publisher P, Language L, 
+	(SELECT T.publisher_id, T.language_id, T.language_count, ROW_NUMBER()
+	OVER (PARTITION BY T.publisher_id ORDER BY T.language_count DESC) AS rn
+	FROM 
+		(SELECT S.publisher_id, S.language_id, COUNT(*) AS language_count
+		FROM Serie S
+		WHERE S.publisher_id IN 
+			(SELECT S2.publisher_id
+			FROM Serie S2
+			GROUP BY S2.publisher_id
+			ORDER BY COUNT(*) DESC
+			FETCH FIRST 10 ROWS ONLY)
+		GROUP BY S.publisher_id, S.language_id
+		ORDER BY COUNT(*) DESC) T
+	) K
+WHERE P.id = K.publisher_id AND
+      L.id = K.language_id AND
+      K.rn <= 3
+ORDER BY publisher_name, language_count DESC
 ;
