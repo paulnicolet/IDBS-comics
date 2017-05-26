@@ -87,17 +87,17 @@ WHERE NOT EXISTS (SELECT SR.origin_id
 		      C.name = 'Batman')
 ;
 
---Print the series names that have the highest number of issues which contain a story whose type (e.g., cartoon) is not the one occurring most frequently in the database (e.g, illustration). AT LEAST 1 STORY NOT OF THIS TYPE ?
+--Print the series names that have the highest number of issues which contain a story whose type (e.g., cartoon) is not the one occurring most frequently in the database (e.g, illustration):
 SELECT SE.name
 FROM Serie SE
-WHERE SE.id = 
+WHERE SE.id =
 	(SELECT I.serie_id
 		FROM Issue I
-		WHERE EXISTS 
+		WHERE EXISTS
 			(SELECT ST.id
 				FROM Story ST
 				WHERE I.id = ST.issue_id AND
-						ST.story_type_id != 
+						ST.story_type_id !=
 							(SELECT S.story_type_id
 								FROM Story S
 								GROUP BY S.story_type_id
@@ -111,7 +111,7 @@ WHERE SE.id =
 	)
 ;
 
---Print the names of publishers who have series with all series types
+--Print the names of publishers who have series with all series types:
 SELECT P.name
 FROM Publisher P, Serie S
 WHERE S.publisher_id = P.id
@@ -119,10 +119,10 @@ GROUP BY P.id, P.name
 HAVING COUNT(DISTINCT S.publication_type_id) = (SELECT COUNT(*) FROM Publication_Type)
 ;
 
---Print the 10 most-reprinted characters from Alan Moore's stories
+--Print the 10 most-reprinted characters from Alan Moore's stories:
 SELECT C.name, COUNT(*)
 FROM Story_Reprint SR, Story S, Story_Character SC, Script SCR, Artist A, Character C
-WHERE S.id = SR.origin_id AND 
+WHERE S.id = SR.origin_id AND
 		S.id = SC.story_id AND
         SC.character_id = C.id AND
 		S.id = SCR.story_id AND
@@ -133,7 +133,7 @@ ORDER BY COUNT(SR.target_id) DESC
 FETCH FIRST 10 ROWS ONLY
 ;
 
---Print the writers of nature-related stories that have also done the pencilwork in all their nature-related stories.
+--Print the writers of nature-related stories that have also done the pencilwork in all their nature-related stories.:
 SELECT SCR.artist_id
 FROM Story S, Script SCR, Pencil P
 WHERE S.id = SCR.story_id AND
@@ -142,9 +142,138 @@ WHERE S.id = SCR.story_id AND
 		S.genre LIKE '%nature%'
 GROUP BY SCR.artist_id
 HAVING COUNT(S.id) = (SELECT COUNT(*)
-						FROM Story, Script 
+						FROM Story, Script
 						WHERE Story.id = Script.story_id AND
                   				Script.artist_id = SCR.artist_id AND
 								Story.genre LIKE '%nature%'
 						)
+;
+
+--Print all story types that have not been published as a part of Italian magazine series.:
+SELECT ST.name
+FROM STORY_TYPE ST
+MINUS
+SELECT DISTINCT ST.name
+FROM STORY_TYPE ST,STORY S,ISSUE I,SERIE SER,PUBLICATION_TYPE PT,COUNTRY C
+WHERE C.name  = 'Italy'
+AND SER.COUNTRY_ID = C.ID
+AND SER.PUBLICATION_TYPE_ID = PT.ID
+AND PT.name = 'magazine'
+AND SER.ID = I.SERIE_ID
+AND S.ISSUE_ID = I.ID
+AND S.STORY_TYPE_ID = ST.ID
+;
+--Print the writers of cartoon stories who have worked as writers for more than one indicia publisher.:
+SELECT A.name
+FROM ARTIST A, SCRIPT SCR,INDICIA_PUBLISHER IP,ISSUE I,STORY S,STORY_TYPE ST
+WHERE A.ID = SCR.ARTIST_ID
+AND SCR.STORY_ID = S.ID
+AND S.ISSUE_ID = I.ID
+AND I.INDICIA_PUBLISHER_ID = IP.ID
+AND ST.NAME = 'cartoon'
+AND ST.ID = S.STORY_TYPE_ID
+GROUP BY A.name,IP.name
+HAVING COUNT(*)>1
+;
+
+--Print the 10 brand groups with the highest number of indicia publishers.:
+SELECT BG.NAME,COUNT(*)
+FROM BRAND_GROUP BG,PUBLISHER P, INDICIA_PUBLISHER IP
+WHERE BG.PUBLISHER_ID = P.id
+AND IP.PUBLISHER_ID = P.ID
+GROUP BY BG.NAME
+ORDER BY COUNT(*) DESC
+FETCH FIRST 10 ROWS ONLY
+;
+
+--Print the average series length (in terms of years) per indicia publisher.:
+SELECT name,AVG(len)
+FROM(
+    SELECT IP.name AS name,S.YEAR_ENDED-S.YEAR_BEGAN as len
+    FROM INDICIA_PUBLISHER IP,SERIE S,ISSUE I
+    WHERE IP.ID = I.INDICIA_PUBLISHER_ID
+    AND I.SERIE_ID = S.ID
+    AND S.YEAR_BEGAN IS NOT NULL
+    AND S.YEAR_ENDED IS NOT NULL
+    GROUP BY IP.name,S.YEAR_ENDED-S.YEAR_BEGAN
+    ORDER BY IP.name
+)
+GROUP BY name
+;
+
+--Print the top 10 indicia publishers that have published the most single-issue series.:
+SELECT Name,COUNT(*)
+FROM(
+  SELECT IP.name as name,COUNT(*) as num
+  FROM INDICIA_PUBLISHER IP,SERIE S,ISSUE I
+  WHERE IP.ID = I.INDICIA_PUBLISHER_ID
+  AND I.SERIE_ID = S.ID
+  GROUP BY IP.name,S.ID
+  ORDER BY COUNT(*),IP.name ASC
+)
+WHERE num = 1
+GROUP BY name
+ORDER BY COUNT(*) DESC
+FETCH FIRST 10 ROWS ONLY
+;
+
+--Print the 10 indicia publishers with the highest number of script writers in a single story.:
+SELECT IP.name,SCR.STORY_ID,COUNT(*)
+FROM INDICIA_PUBLISHER IP,STORY S,ISSUE I, SCRIPT SCR
+WHERE IP.ID = I.INDICIA_PUBLISHER_ID
+AND I.ID = S.issue_id
+AND SCR.STORY_ID = S.ID
+GROUP BY IP.name,SCR.STORY_ID
+ORDER BY COUNT(*) DESC
+FETCH FIRST 10 ROWS ONLY
+;
+
+--Print all Marvel heroes that appear in Marvel-DC story crossovers.:
+SELECT C.name
+FROM CHARACTER C,
+(
+SELECT  SC.CHARACTER_ID
+FROM STORY_CHARACTER SC,STORY S,ISSUE I,SERIE SER,PUBLISHER P
+WHERE P.name = 'Marvel'
+AND P.ID = SER.PUBLISHER_ID
+AND SER.ID = I.SERIE_ID
+AND I.ID = S.ISSUE_ID
+AND S.ID = SC.STORY_ID
+
+INTERSECT
+
+SELECT SC.CHARACTER_ID
+FROM STORY_CHARACTER SC,STORY S,ISSUE I,SERIE SER,PUBLISHER P
+WHERE P.ID = SER.PUBLISHER_ID
+AND P.name LIKE '%DC%' AND P.name LIKE '%Marvel%'
+AND SER.ID = I.SERIE_ID
+AND I.ID = S.ISSUE_ID
+AND S.ID = SC.STORY_ID
+) A
+WHERE A.CHARACTER_ID = C.ID
+;
+
+--Print the top 5 series with most issues:
+SELECT S.name,COUNT(*)
+FROM SERIE S, ISSUE I
+WHERE S.ID = I.SERIE_ID
+GROUP BY S.name
+ORDER BY COUNT(*) DESC
+FETCH FIRST 5 ROWS ONLY
+;
+--Given an issue, print its most reprinted story.:
+SELECT Iid as id,title,numof
+FROM(
+  SELECT  V.*,ROW_NUMBER()
+  OVER (PARTITION BY V.Iid ORDER BY V.numof) AS rn
+  FROM (
+    SELECT I.ID as Iid,S.title AS title,COUNT(*) as numof
+    FROM Story S, ISSUE I,STORY_REPRINT SR
+    WHERE I.ID = S.ISSUE_ID
+    AND S.ID = SR.ORIGIN_ID
+    GROUP BY I.ID,S.title
+    ORDER BY I.ID,COUNT(*) DESC
+    ) V
+)
+WHERE rn = 1
 ;
