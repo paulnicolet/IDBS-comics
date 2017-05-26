@@ -173,6 +173,19 @@ WHERE P.id = K.publisher_id AND
 ORDER BY publisher_name, language_count DESC
 ;
 
+--Print the languages that have more than 10000 original stories published in magazines, along with the number of those stories:
+SELECT L.name, COUNT(*) AS story_count
+FROM Story S, Issue I, Serie SE, Publication_Type PT, Language L
+WHERE S.issue_id = I.id AND
+		I.serie_id = SE.id AND
+		L.id = SE.language_id AND
+		S.id NOT IN (SELECT SR.target_id FROM Story_Reprint SR) AND
+		SE.publication_type_id = PT.id AND 
+		PT.name = 'magazine'
+GROUP BY L.name, SE.language_id
+HAVING COUNT(*) >= 10000
+ORDER BY COUNT(*) DESC
+
 --Print all story types that have not been published as a part of Italian magazine series.:
 SELECT ST.name
 FROM STORY_TYPE ST
