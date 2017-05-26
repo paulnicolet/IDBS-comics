@@ -211,8 +211,8 @@ AND S.ISSUE_ID = I.ID
 AND I.INDICIA_PUBLISHER_ID = IP.ID
 AND ST.NAME = 'cartoon'
 AND ST.ID = S.STORY_TYPE_ID
-GROUP BY A.name,IP.name
-HAVING COUNT(*)>1
+GROUP BY A.name
+HAVING COUNT(DISTINCT INDICIA_PUBLISHER_ID) > 1
 ;
 
 --Print the 10 brand groups with the highest number of indicia publishers.:
@@ -228,14 +228,12 @@ FETCH FIRST 10 ROWS ONLY
 --Print the average series length (in terms of years) per indicia publisher.:
 SELECT name,AVG(len)
 FROM(
-    SELECT IP.name AS name,S.YEAR_ENDED-S.YEAR_BEGAN as len
+    SELECT IP.name AS name, S.YEAR_ENDED-S.YEAR_BEGAN as len
     FROM INDICIA_PUBLISHER IP,SERIE S,ISSUE I
     WHERE IP.ID = I.INDICIA_PUBLISHER_ID
     AND I.SERIE_ID = S.ID
     AND S.YEAR_BEGAN IS NOT NULL
     AND S.YEAR_ENDED IS NOT NULL
-    GROUP BY IP.name,S.YEAR_ENDED-S.YEAR_BEGAN
-    ORDER BY IP.name
 )
 GROUP BY name
 ;
@@ -248,7 +246,6 @@ FROM(
   WHERE IP.ID = I.INDICIA_PUBLISHER_ID
   AND I.SERIE_ID = S.ID
   GROUP BY IP.name,S.ID
-  ORDER BY COUNT(*),IP.name ASC
 )
 WHERE num = 1
 GROUP BY name
