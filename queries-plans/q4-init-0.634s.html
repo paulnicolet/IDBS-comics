@@ -1,0 +1,196 @@
+<TABLE class="TreeTableWidget" border=0 cellpadding=0 cellspacing=0 width=100% bgcolor=#efefef><tr><td> 
+
+ <!-- ..........................data begin...........................  -->
+
+    <TABLE class=TreeTableWidget border=0 cellspacing=0 cellpadding=1 align=center width=100%"  bgcolor=#ffffff> 
+    <tr class="TableCell">
+
+       <td valign=top bgcolor=#bbbbbb>&nbsp;<font color=#444477>OPERATION</font>&nbsp;</td>
+
+       <td valign=top bgcolor=#aaaaaa>&nbsp;<font color=#444477>OBJECT_NAME</font>&nbsp;</td>
+
+       <td valign=top bgcolor=#bbbbbb>&nbsp;<font color=#444477>CARDINALITY</font>&nbsp;</td>
+
+       <td valign=top bgcolor=#aaaaaa>&nbsp;<font color=#444477>COST</font>&nbsp;</td>
+
+    </tr>
+
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><font size=-1><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/gray.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;SELECT STATEMENT&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#dfd5d1 >&nbsp;1&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;8154&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/gray.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;FILTER&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#ffffd2 >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;&nbsp&nbsp;</td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/sigmafilter.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;Filter Predicates&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;COUNT(*)= (SELECT COUNT(*) FROM SCRIPT SCRIPT,STORY STORY WHERE STORY.ID=SCRIPT.STORY_ID AND STORY.GENRE IS NOT NULL AND STORY.GENRE LIKE '%nature%' AND SCRIPT.ARTIST_ID=:B1)&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/gray.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;HASH&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#dfd5d1 >&nbsp;1&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;8154&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/join.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;HASH JOIN&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#ffffd2 >&nbsp;50&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;8153&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/sigmakeys.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;Access Predicates&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/and.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;AND&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;S.ID=SCR.STORY_ID&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;SCR.ARTIST_ID=P.ARTIST_ID&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><font size=-1><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/join.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;NESTED LOOPS&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#dfd5d1 >&nbsp;50&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;8153&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><font size=-1><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/gray.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;STATISTICS COLLECTOR&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#ffffd2 >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;&nbsp&nbsp;</td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/join.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;HASH JOIN&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#dfd5d1 >&nbsp;72758&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;6346&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/sigmakeys.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;Access Predicates&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;S.ID=P.STORY_ID&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><font size=-1><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/table.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;TABLE ACCESS&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;STORY&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#ffffd2 >&nbsp;67699&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;5517&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/sigmafilter.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;Filter Predicates&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/and.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;AND&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;S.GENRE IS NOT NULL&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;S.GENRE LIKE '%nature%'&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><font size=-1><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/table.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;TABLE ACCESS&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;PENCIL&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfd5d1 >&nbsp;1445951&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;825&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/index.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;INDEX&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#ffffdf ><font size=-1>&nbsp;SYS_C0040363&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#ffffd2 >&nbsp;1&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;1180&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/sigmakeys.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;Access Predicates&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/and.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;AND&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;SCR.ARTIST_ID=P.ARTIST_ID&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;S.ID=SCR.STORY_ID&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><font size=-1><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/table.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;TABLE ACCESS&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;SCRIPT&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfd5d1 >&nbsp;1059520&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;619&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/sortascending_ena.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;SORT&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#ffffd2 >&nbsp;1&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;&nbsp&nbsp;</td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><font size=-1><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/join.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;NESTED LOOPS&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#dfd5d1 >&nbsp;21&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;25&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><font size=-1><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/join.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;NESTED LOOPS&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;&nbsp&nbsp;</td>
+      <td width=13% valign=top bgcolor=#ffffd2 >&nbsp;21&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;25&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/index.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;INDEX&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf ><font size=-1>&nbsp;SYS_C0040363&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfd5d1 >&nbsp;21&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;3&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/sigmakeys.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;Access Predicates&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;SCRIPT.ARTIST_ID=:B1&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/index.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;INDEX&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#ffffdf ><font size=-1>&nbsp;SYS_C0040333&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#ffffd2 >&nbsp;1&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#ffffdf >&nbsp;1&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/sigmakeys.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;Access Predicates&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;STORY.ID=SCRIPT.STORY_ID&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff ><font size=-1><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/table.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;TABLE ACCESS&nbsp;</td></tr></table></font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;STORY&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfd5d1 >&nbsp;1&nbsp;</font></td>
+      <td width=13% valign=top bgcolor=#dfdfdf >&nbsp;2&nbsp;</font></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/sigmafilter.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;Filter Predicates&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/and.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;AND&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;STORY.GENRE IS NOT NULL&nbsp;</td></tr></table></td>
+   </tr>
+   <tr>
+      <td width=45% valign=top bgcolor=#ffffff colspan=4><table width=100% border=0 cellspacing=0 cellpadding=0><tr><td width=1%><table CELLSPACING=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><IMG SRC="images/minus.gif" wWIDTH=16 hHEIGHT=16 BORDER=0><IMG SRC="images/empty.png" wWIDTH=16 hHEIGHT=16 BORDER=0></td><tr></table></td>  <td width=99%>&nbsp;STORY.GENRE LIKE '%nature%'&nbsp;</td></tr></table></td>
+   </tr>
+</table>
+
+ <!-- ..........................data end...........................  -->
+
+</td></tr></TABLE> 
