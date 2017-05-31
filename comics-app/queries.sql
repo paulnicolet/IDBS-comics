@@ -59,11 +59,11 @@ FETCH FIRST 10 ROWS ONLY
 SELECT DISTINCT A.name
 FROM Artist A
 WHERE A.id IN (SELECT S.artist_id
-                  FROM Script S, Pencil P, Color C
-		      WHERE S.artist_id = P.artist_id AND
-                  P.artist_id = C.artist_id AND
-                  P.story_id = C.story_id AND
-                  P.story_id = S.story_id)
+                FROM Script S, Pencil P, Color C
+				WHERE S.artist_id = P.artist_id AND
+					P.artist_id = C.artist_id AND
+					P.story_id = C.story_id AND
+					P.story_id = S.story_id)
 ;
 
 --Print all non-reprinted stories involving Batman as a non-featured character:
