@@ -241,13 +241,13 @@ GROUP BY name
 --Print the top 10 indicia publishers that have published the most single-issue series.:
 SELECT Name,COUNT(*)
 FROM(
-  SELECT IP.name as name,COUNT(*) as num
-  FROM INDICIA_PUBLISHER IP,SERIE S,ISSUE I
+  SELECT IP.name as name, COUNT(*) as num
+  FROM INDICIA_PUBLISHER IP, SERIE S, ISSUE I
   WHERE IP.ID = I.INDICIA_PUBLISHER_ID
   		AND I.SERIE_ID = S.ID
   GROUP BY IP.name,S.ID
+  HAVING COUNT(*) = 1
 )
-WHERE num = 1
 GROUP BY name
 ORDER BY COUNT(*) DESC
 FETCH FIRST 10 ROWS ONLY
