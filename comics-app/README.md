@@ -26,15 +26,17 @@ TABLE2_ID
 
 With XXX the name of the relation, TABLE1 the exact name of the first table, TABLE2 is the exact name of the second table, table2 is the attribut of table one.
 Ex. the script relation is the following : 
+
 SCRIPT:
 STORY_ID
 ARTIST_ID 
-the artist element is an attribut of story so we put story as the first table
+
+The ARTIST element is an attribut of story so we put STORY as the first table
 
 The dictionnary must also store a boolean saying if we are allowed to add a new element in the foreign table as for case 2.
 
 
-EXAMPLES:
+##EXAMPLES:
 ### Case 1
 'CHARACTER': {'NAME': {'case': 1, 'nullable': False}}
 the name table has on attribut name of case 1 and it is not nullable.
