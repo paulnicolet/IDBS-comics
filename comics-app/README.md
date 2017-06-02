@@ -36,7 +36,7 @@ The ARTIST element is an attribut of story so we put STORY as the first table
 The dictionnary must also store a boolean saying if we are allowed to add a new element in the foreign table as for case 2.
 
 
-##EXAMPLES:
+## EXAMPLES:
 ### Case 1
 'CHARACTER': {'NAME': {'case': 1, 'nullable': False}}
 the name table has on attribut name of case 1 and it is not nullable.
