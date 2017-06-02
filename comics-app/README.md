@@ -13,8 +13,27 @@ When the webapp is lauched we create a dictionnary containing all the informatio
 For this type of attibut we store in the dictionnary the number of the case (1) and a boolean nullable indicating if the value can be nil.
 
 ### Case 2 
-For this case, we must store in the dictionnary the name of the foreign table, the nullable boolean as indicated previously and we must also store a boolean to indicate if we can add a new element in the foreign table or if it is forbiden and the user must give an existing one. The rule to allow this is that the foreign table must have only a single attribut. Ex. When adding a story, if the user enters an stroy_type that is not in the database then the interface will automatically add the new stroy_type with the new name. If the user is inserting a new issue and gives a non existing country then it will not add anything because country has 2 attributes and must add the country separately. To identify sush elements the attribut must be named XXX_ID where XXX is the exact name of the foreign table.
+For this case, we must store in the dictionnary the name of the foreign table, the nullable boolean as indicated previously and we must also store a boolean to indicate if we can add a new element in the foreign table or if it is forbiden and the user must give an existing one. The rule to allow this is that the foreign table must have only a single attribut. 
+Ex. When adding a story, if the user enters an stroy_type that is not in the database then the interface will automatically add the new stroy_type with the new name. If the user is inserting a new issue and gives a non existing country then it will not add anything because country has 2 attributes and must add the country separately. 
+To identify sush elements the attribut must be named XXX_ID where XXX is the exact name of the foreign table.
 
 ### Case 3
 For this case, the dictionnary must store as before the nullable boolean, it must store the name of the foreign table where the actual information is stored and it must store the name of the table of the relation. The structure of the relation must be the follwing:
 
+XXXX:
+TABLE1_ID
+TABLE2_ID
+
+With XXX the name of the relation, TABLE1 the exact name of the first table, TABLE2 is the exact name of the second table, table2 is the attribut of table one.
+Ex. the script relation is the following : 
+SCRIPT:
+STORY_ID
+ARTIST_ID 
+the artist element is an attribut of story so we put story as the first table
+
+The dictionnary must also store a boolean saying if we are allowed to add a new element in the foreign table as for case 2.
+
+
+EXAMPLES:
+### Case 1
+'CHARACTER': {'NAME': {'case': 1, 'nullable': False}}
