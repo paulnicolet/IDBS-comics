@@ -38,14 +38,16 @@ The dictionnary must also store a boolean saying if we are allowed to add a new 
 
 ## EXAMPLES:
 ### Case 1
-'CHARACTER': {'NAME': {'case': 1, 'nullable': False}}
+```'CHARACTER': {'NAME': {'case': 1, 'nullable': False}}```
+
 the name table has on attribut name of case 1 and it is not nullable.
 
 ### Case 2
-'ISSUE': {...,'SERIE_ID': {'case': 2, 'foreign_table': 'SERIE', 'nullable': False, 'insert_foreign_table': False}, ...},
+```'ISSUE': {...,'SERIE_ID': {'case': 2, 'foreign_table': 'SERIE', 'nullable': False, 'insert_foreign_table': False}, ...}```
+
 ISSUE has the attribut SERIE_ID of case 2, the foreign table associated is SERIE this is not nullable and we cann add a new SERIE automatically while adding a ISSUE
 
 ### Case 3
-'ISSUE': {... 'EDITING': {'case': 3, 'foreign_table': 'EDITOR', 'foreign_relation': 'ISSUE_EDITING', 'nullable': True, 'insert_foreign_table': True},...},
+```'ISSUE': {... 'EDITING': {'case': 3, 'foreign_table': 'EDITOR', 'foreign_relation': 'ISSUE_EDITING', 'nullable': True, 'insert_foreign_table': True},...}```
 
 ISSUE has the attribut EDITING which is case 3 the foreign table where is stored the name of the edit is EDITOR, the foreign relation where the actual relation is stored is ISSUE_EDITING, the element is nullable and we can insert a new editor automatically when adding a new ISSUE.
