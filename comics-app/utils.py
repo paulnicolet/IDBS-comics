@@ -257,8 +257,8 @@ def insertion(insert_dict, form_info, con):
     # make the final query and execute it
     query = insert_query(inserted_elem, table)
     print(query)
-    #execute_query(con, query, inserted_elem)
-    # con.commit()
+    execute_query(con, query, inserted_elem)
+    con.commit()
 
 
 def get_new_id(con, table):

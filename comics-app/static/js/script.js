@@ -105,7 +105,11 @@ function buildInsert() {
     $('#db-interface').load('/insert', () => {
         //create all the cells based on the selected table
         asyncForm($('#insert-form'), createInsertCells);
-        $('#insert-data-form').ajaxForm();
+        //$('#insert-data-form').ajaxForm();
+        asyncForm($('#insert-data-form'), () => {
+            UIkit.notification('Data inserted!', 'success');
+        });
+        
         $('#insert-form').on('change', () => {
             $('#table-name').val($('#table-selector').find(":selected").text())
             $('#insert-form').submit();

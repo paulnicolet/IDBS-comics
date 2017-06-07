@@ -109,7 +109,10 @@ def delete():
 
     query = 'DELETE FROM {} WHERE id=:tuple'.format(table_name)
     # Do not delete during development :)
-    #result = execute_query(get_db(app), query, tuple=tuple_id)
+    con = get_db(app)
+    #result = execute_query(con, query, tuple=tuple_id)
+    execute_query(con, query, tuple=tuple_id)
+    con.commit()
 
     return 'Deleted', 200
 
